@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard</title>
+  <link rel="stylesheet" href="/css/admin.css" />
+</head>
+<body>
+
+<div class="admin-layout">
+
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-icon">⚙️</div>
+      <div>
+        <div class="logo-text">Admin Panel</div>
+        <div class="logo-sub">TRAINING SYSTEM</div>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="nav-section-title">หลัก</div>
+      <a href="dashboard.html" class="nav-item active">
+        <span class="nav-icon">📊</span> Dashboard
+      </a>
+      <a href="users.html" class="nav-item">
+        <span class="nav-icon">👥</span> จัดการผู้ใช้
+        <span class="nav-badge" id="userCount">—</span>
+      </a>
+      <a href="templates.html" class="nav-item">
+        <span class="nav-icon">📄</span> จัดการ Template
+      </a>
+    </nav>
+    
+
+    <div class="sidebar-footer">
+      <div class="admin-profile" id="adminProfile">
+        <div class="profile-avatar" id="avatarLetter">A</div>
+        <div>
+          <div class="profile-name" id="profileName">Admin</div>
+          <div class="profile-role">ADMINISTRATOR</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <div class="main-content">
+    <header class="topbar">
+      <div class="topbar-left">
+        <div>
+          <div class="page-title">Dashboard</div>
+          <div class="page-breadcrumb">admin / dashboard</div>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <button class="logout-btn" onclick="logout()">🚪 ออกจากระบบ</button>
+      </div>
+    </header>
+
+    <main class="page-content">
+
+      <!-- Stats -->
+      <div class="stats-grid">
+        <div class="stat-card blue">
+          <div class="stat-icon">👥</div>
+          <div>
+            <div class="stat-value" id="statTotal">—</div>
+            <div class="stat-label">ผู้ใช้ทั้งหมด</div>
+          </div>
+        </div>
+        <div class="stat-card green">
+          <div class="stat-icon">🛡️</div>
+          <div>
+            <div class="stat-value" id="statAdmin">—</div>
+            <div class="stat-label">Admin</div>
+          </div>
+        </div>
+        <div class="stat-card yellow">
+          <div class="stat-icon">👤</div>
+          <div>
+            <div class="stat-value" id="statUser">—</div>
+            <div class="stat-label">User ทั่วไป</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Dashboard Grid -->
+      <div class="dashboard-grid">
+
+        <!-- Recent Users -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">👥 ผู้ใช้ล่าสุด</div>
+            <a href="users.html" class="btn btn-ghost btn-sm">ดูทั้งหมด →</a>
+          </div>
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>ชื่อผู้ใช้</th>
+                  <th>ชื่อ-นามสกุล</th>
+                  <th>Role</th>
+                  <th>วันที่สร้าง</th>
+                </tr>
+              </thead>
+              <tbody id="recentUsersBody">
+                <tr class="loading-row">
+                  <td colspan="5"><span class="spinner"></span> กำลังโหลด...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div>
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">⚡ Quick Actions</div>
+            </div>
+            <div class="card-body" style="display:flex;flex-direction:column;gap:10px;">
+              <a href="users.html" class="btn btn-primary" style="justify-content:center;">
+                ➕ เพิ่มผู้ใช้ใหม่
+              </a>
+              <a href="users.html" class="btn btn-ghost" style="justify-content:center;">
+                📋 รายชื่อผู้ใช้ทั้งหมด
+              </a>
+            </div>
+          </div>
+
+          <!-- System Info -->
+          <div class="card" style="margin-top:16px;">
+            <div class="card-header">
+              <div class="card-title">🖥️ ข้อมูลระบบ</div>
+            </div>
+            <div class="card-body">
+              <div class="activity-item">
+                <div class="activity-dot blue"></div>
+                <div>
+                  <div class="activity-text">ระบบทำงานปกติ</div>
+                  <div class="activity-time">API: FastAPI + MySQL</div>
+                </div>
+              </div>
+              <div class="activity-item">
+                <div class="activity-dot green"></div>
+                <div>
+                  <div class="activity-text">Session: 8 ชั่วโมง</div>
+                  <div class="activity-time">Auth: bcrypt + Cookie</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast-container" id="toastContainer"></div>
+
+<script src="/js/admin/utils.js"></script>
+<script src="/js/admin/dashboard.js"></script>
+</body>
+</html>

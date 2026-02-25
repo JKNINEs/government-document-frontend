@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <title>จัดการข้อมูลรุ่นการอบรม | สพร.3 ชลบุรี</title>
+    <link rel="stylesheet" href="../css/index.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        /* ===== Mode Badge ===== */
+        .mode-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 5px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            margin-left: 12px;
+            vertical-align: middle;
+        }
+        .mode-badge.create { background: #dcfce7; color: #15803d; }
+        .mode-badge.edit   { background: #dbeafe; color: #1d4ed8; }
+
+        /* ===== Mode Selector Modal ===== */
+        .ms-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(10,10,30,0.5);
+            backdrop-filter: blur(5px);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+        }
+        .ms-overlay.ms-open { display: flex; animation: msFadeIn .2s ease; }
+        @keyframes msFadeIn { from{opacity:0} to{opacity:1} }
+
+        .ms-card {
+            background: #fff;
+            border-radius: 18px;
+            padding: 28px;
+            width: 420px;
+            max-width: calc(100vw - 32px);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.18);
+            animation: msSlideUp .22s cubic-bezier(.22,.68,0,1.2);
+        }
+        @keyframes msSlideUp {
+            from{ transform:translateY(20px); opacity:0 }
+            to  { transform:translateY(0);    opacity:1 }
+        }
+
+        .ms-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 22px;
+        }
+        .ms-title    { font-size: 17px; font-weight: 700; color: #1a1a2e; margin: 0 0 4px; }
+        .ms-subtitle { font-size: 13px; color: #888; margin: 0; }
+        .ms-close {
+            background: #f5f5f5; border: none; border-radius: 50%;
+            width: 32px; height: 32px; font-size: 14px; cursor: pointer; color: #666;
+        }
+        .ms-close:hover { background: #e8e8e8; }
+
+        .ms-choices { display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; }
+
+        .ms-choice {
+            display: flex; align-items: center; gap: 14px;
+            padding: 15px 18px; border-radius: 12px; border: 2px solid #ebebeb;
+            cursor: pointer; transition: border-color .18s, background .18s, transform .12s;
+            user-select: none;
+        }
+        .ms-choice:hover { transform: translateY(-1px); }
+        .ms-choice--create:hover { border-color: #16a34a; background: #f0fdf4; }
+        .ms-choice--edit:hover   { border-color: #2563eb; background: #eff6ff; }
+        .ms-choice--edit.ms-active { border-color: #2563eb; background: #eff6ff; }
+
+        .ms-icon {
+            width: 44px; height: 44px; border-radius: 10px;
+            display: flex; align-items: center; justify-content: center; font-size: 20px;
+        }
+        .ms-choice--create .ms-icon { background: #dcfce7; }
+        .ms-choice--edit   .ms-icon { background: #dbeafe; }
+
+        .ms-label { font-size: 15px; font-weight: 600; margin-bottom: 2px; }
+        .ms-desc  { font-size: 12px; color: #999; }
+        .ms-arrow { margin-left: auto; font-size: 22px; color: #ccc; transition: transform .2s, color .2s; }
+        .ms-choice:hover .ms-arrow,
+        .ms-choice.ms-active .ms-arrow { color: #555; }
+        .ms-arrow.ms-rotate { transform: rotate(90deg); color: #2563eb; }
+
+        /* Search box */
+        .ms-search-box {
+            display: none; background: #f8fafc; border: 1px solid #e2e8f0;
+            border-radius: 10px; padding: 16px; margin-bottom: 14px;
+            animation: msDown .18s ease;
+        }
+        .ms-search-box.ms-open { display: block; }
+        @keyframes msDown { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:translateY(0)} }
+
+        .ms-search-label { display: block; font-size: 13px; font-weight: 600; color: #555; margin-bottom: 8px; }
+        .ms-search-row   { display: flex; gap: 8px; }
+        .ms-search-input {
+            flex: 1; padding: 10px 13px; border: 1.5px solid #cbd5e1;
+            border-radius: 8px; font-size: 14px; outline: none; font-family: inherit;
+        }
+        .ms-search-input:focus { border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37,99,235,.1); }
+        .ms-go-btn {
+            padding: 10px 18px; background: #2563eb; color: #fff; border: none;
+            border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; font-family: inherit;
+        }
+        .ms-go-btn:hover { background: #1d4ed8; }
+
+        .ms-error   { display: none; margin-top: 8px; font-size: 12px; color: #dc2626; }
+        .ms-loading { display: none; margin-top: 8px; font-size: 12px; color: #2563eb; }
+
+        .ms-cancel-btn {
+            width: 100%; padding: 10px; background: #f5f5f5; border: none;
+            border-radius: 8px; font-size: 14px; color: #666; cursor: pointer; font-family: inherit;
+        }
+        .ms-cancel-btn:hover { background: #ebebeb; }
+    </style>
+</head>
+<body>
+
+<!-- ===== Topbar ===== -->
+<header class="topbar">
+    <a href="../home.html" class="logo-box">
+        <img src="../img/logo.png" alt="logo">
+    </a>
+    <nav class="top-menu">
+        <a href="../home.html" class="nav-link">หน้าแรก</a>
+        <a href="../index.html" class="nav-link active">ระบบจัดทำเอกสาร</a>
+        <button class="login-btn" id="authBtn">เข้าสู่ระบบ</button>
+    </nav>
+</header>
+
+<!-- ===== Main Layout ===== -->
+<div class="container1">
+    <main class="content1">
+
+        <!-- Page Header -->
+        <div class="page-header">
+            <div class="page-title">
+                <img src="../img/word.png" alt="" class="title-icon">
+                <h2 id="pageTitle">จัดการข้อมูลรุ่นการอบรม</h2>
+                <!-- Badge แสดง mode ปัจจุบัน -->
+                <span id="modeBadge" class="mode-badge create">➕ สร้างใหม่</span>
+            </div>
+        </div>
+
+        <!-- Step Header -->
+        <div class="step-header">
+            <button type="button" class="step-tab active" data-step="0">ข้อมูลโครงการ</button>
+            <button type="button" class="step-tab" data-step="1">วิทยากร / เจ้าหน้าที่</button>
+            <button type="button" class="step-tab" data-step="2">รายละเอียดค่าใช้จ่าย</button>
+            <div class="header-actions" style="display:flex; gap:8px;">
+                <!-- ✅ ปุ่มเลือก Mode -->
+                <button class="btn btn-new" id="switchModeBtn" onclick="openModeModal()" style="background:#fff; color:#374151; border:2px solid #d1d5db;">
+                    ⚙️ สร้าง/เเก้ใข
+                </button>
+                <a href="../index.html" class="btn btn-new" id="mainCreateBtn">กลับ</a>
+            </div>
+        </div>
+
+        <!-- ===== STEP 1 ===== -->
+        <div class="form-step active" id="step-1">
+            <div class="form-row">
+                <label>รุ่นที่เปิด <span style="color:red;">*</span></label>
+                <div class="select-wrapper">
+                    <input type="text" id="batchInput" list="batchOptions" placeholder="พิมพ์เพื่อค้นหา..." autocomplete="off">
+                    <datalist class="select-dropdown" id="batchOptions"></datalist>
+                    <div id="status"></div>
+                </div>
+            </div>
+            <div class="form-row">
+                <label>รหัสรุ่นในระบบกรม</label>
+                <input id="systemCodeInput" autocomplete="off">
+                <label>เลขหนังสือขอเปิดฝึก</label>
+                <input id="requestDocNoInput">
+                <label>วันที่ประกาศจบ</label>
+                <input id="annountment" type="date" autocomplete="off">
+                <label>วันที่อบรม</label>
+                <input id="trainingDateInput" autocomplete="off" placeholder="เช่น 17 - 23 ตุลาคม 2569">
+                <label>กลุ่มเป้าหมาย</label>
+                <input id="targetGroupInput" autocomplete="off">
+                <label>วันที่ขอเปิด</label>
+                <input id="requestDateInput" type="date" autocomplete="off">
+                <label>เวลา</label>
+                <select id="trainingTimeInput">
+                    <option value="">-- เลือกเวลา --</option>
+                    <option value="08.00 - 17.00 น.">08.00 - 17.00 น.</option>
+                    <option value="08.30 - 16.00 น.">08.30 - 16.00 น.</option>
+                    <option value="08.30 - 17.00 น.">08.30 - 17.00 น.</option>
+                    <option value="09.00 - 16.00 น.">09.00 - 16.00 น.</option>
+                    <option value="09.00 - 17.00 น.">09.00 - 17.00 น.</option>
+                </select>
+            </div>
+            <div class="form-row">
+                <label>ชื่อกิจกรรม (ย่อ) <span style="color:red;">*</span></label>
+                <div class="select-wrapper">
+                    <input type="text" id="activityNameInput" placeholder="พิมพ์เพื่อค้นหา..." autocomplete="off">
+                    <div class="select-dropdown" id="activityNameDropdown"></div>
+                </div>
+            </div>
+            <div class="form-row">
+                <label>ประเภทงบประมาณ</label>
+                <input id="kindOfFiscalInput" readonly autocomplete="off">
+                <label>แผนงาน</label>
+                <div class="select-wrapper">
+                    <input type="text" id="planNameInput" placeholder="พิมพ์หรือเลือก..." autocomplete="off">
+                    <div class="select-dropdown" id="planDropdown"></div>
+                </div>
+                <label>โครงการ</label>
+                <div class="select-wrapper">
+                    <input type="text" id="projectNameInput" placeholder="พิมพ์หรือเลือก..." autocomplete="off">
+                    <div class="select-dropdown" id="projectDropdown"></div>
+                </div>
+                <label>กิจกรรม</label>
+                <input id="ActivityInput" readonly autocomplete="off">
+                <label>กิจกรรมย่อย</label>
+                <input id="subActivityInput" readonly autocomplete="off">
+                <label>ชื่อค่าใช้จ่าย</label>
+                <input id="expensesInput" readonly autocomplete="off">
+                <label>ปีงบประมาณ</label>
+                <input id="fiscalYearInput" readonly autocomplete="off">
+            </div>
+            <div class="form-row">
+                <label>ชื่อหลักสูตร <span style="color:red;">*</span></label>
+                <div class="select-wrapper">
+                    <input type="text" id="courseNameInput" placeholder="พิมพ์เพื่อค้นหา..." autocomplete="off">
+                    <div class="select-dropdown" id="courseNameDropdown"></div>
+                </div>
+                <label>รหัสหลักสูตร <span style="color:red;">*</span></label>
+                <div class="select-wrapper">
+                    <input type="text" id="courseCodeInput" placeholder="พิมพ์เพื่อค้นหา..." autocomplete="off">
+                    <div class="select-dropdown" id="courseCodeDropdown"></div>
+                </div>
+                <label>ประเภทการฝึก</label>
+                <input type="text" id="courseTypeInput" readonly autocomplete="off">
+                <label>ระยะเวลาฝึก (ชั่วโมง)</label>
+                <input type="text" id="courseHoursInput" readonly autocomplete="off">
+            </div>
+            <div class="form-row">
+                <label>สถานที่ฝึก <span style="color:red;">*</span></label>
+                <div class="select-wrapper">
+                    <input type="text" id="locationNameInput" placeholder="พิมพ์เพื่อค้นหา..." autocomplete="off">
+                    <div class="select-dropdown" id="locationDropdown"></div>
+                </div>
+            </div>
+            <div class="form-actions">
+                <button type="button" class="nextBtn">ถัดไป</button>
+            </div>
+        </div>
+
+        <!-- ===== STEP 2 ===== -->
+        <div class="form-step" id="step-2">
+            <div class="form-row">
+                <label>วิทยากร 1 <span style="color:red;">*</span></label>
+                <div class="select-wrapper">
+                    <input type="text" id="instructorsInput" placeholder="พิมพ์เพื่อค้นหา..." autocomplete="off">
+                    <div class="select-dropdown" id="instructorsDropdown"></div>
+                </div>
+                <label>เลขบัตรวิทยากร</label>
+                <input id="idCardInput" readonly>
+            </div>
+            <div class="form-row">
+                <label>ผู้ควบคุม</label>
+                <div class="select-wrapper1">
+                    <input id="controller" type="text" class="staffInput" placeholder="พิมพ์เพื่อค้นหา..." autocomplete="off">
+                    <div class="select-dropdown staffDropdown"></div>
+                </div>
+                <label>ตำแหน่งผู้ควบคุม</label>
+                <input id="controller_position" type="text" class="positionInput" readonly>
+            </div>
+            <div class="form-row">
+                <label>ผู้ประสาน 1</label>
+                <div class="select-wrapper1">
+                    <input id="coordinator1" type="text" class="staffInput" placeholder="พิมพ์เพื่อค้นหา..." autocomplete="off">
+                    <div class="select-dropdown staffDropdown"></div>
+                </div>
+                <label>ตำแหน่งผู้ประสาน 1</label>
+                <input id="coordinator_position1" type="text" class="positionInput" readonly>
+            </div>
+            <div class="form-row">
+                <label>ผู้ประสาน 2</label>
+                <div class="select-wrapper1">
+                    <input id="coordinator2" type="text" class="staffInput" placeholder="พิมพ์เพื่อค้นหา..." autocomplete="off">
+                    <div class="select-dropdown staffDropdown"></div>
+                </div>
+                <label>ตำแหน่งผู้ประสาน 2</label>
+                <input id="coordinator_position2" type="text" class="positionInput" readonly>
+            </div>
+            <div class="form-row">
+                <label>ผู้ประสาน 3</label>
+                <div class="select-wrapper1">
+                    <input id="coordinator3" type="text" class="staffInput" placeholder="พิมพ์เพื่อค้นหา..." autocomplete="off">
+                    <div class="select-dropdown staffDropdown"></div>
+                </div>
+                <label>ตำแหน่งผู้ประสาน 3</label>
+                <input id="coordinator_position3" type="text" class="positionInput" readonly>
+            </div>
+            <div class="form-row">
+                <label>ชื่อผู้ยืมเงิน</label>
+                <div class="select-wrapper1">
+                    <input id="borrowname" type="text" class="staffInput" placeholder="พิมพ์เพื่อค้นหา..." autocomplete="off">
+                    <div class="select-dropdown staffDropdown"></div>
+                </div>
+                <label>ตำแหน่งผู้ยืมเงิน</label>
+                <input id="borrowname_position3" type="text" class="positionInput" readonly>
+            </div>
+            <div class="form-actions">
+                <button type="button" class="backBtn">ย้อนกลับ</button>
+                <button type="button" class="nextBtn">ถัดไป</button>
+            </div>
+        </div>
+
+        <!-- ===== STEP 3 ===== -->
+        <div class="form-step" id="step-3">
+            <div class="form-row">
+                <label>เลขสัญญายืมเงิน</label>
+                <div class="select-wrapper">
+                    <input id="loanNameInput" type="text" autocomplete="off" placeholder="ไม่ต้องกรอก">
+                    <div class="select-dropdown" id="loanDropdown"></div>
+                </div>
+            </div>
+            <div class="form-row">
+                <label>ระยะเวลา (ชั่วโมง)</label>
+                <input id="courseHoursInput1" readonly>
+                <label>จำนวนคนสมัคร</label>
+                <input id="applicant_count" type="text" placeholder="ไม่ต้องกรอก">
+                <label>จำนวนวันฝึก</label>
+                <input id="durationDaysInput" type="number">
+                <label>ค่าวิทยากร (บาท/ชั่วโมง)</label>
+                <input id="costSpeakerNameInput" type="number" step="0.01">
+                <label>ค่าวัสดุ</label>
+                <input id="material" type="number" step="0.01">
+                <label>ค่าอาหารว่าง/คน (บาท)</label>
+                <input id="costFoodNameInput" type="number" step="0.01">
+                <label>จำนวนมื้ออาหารว่าง</label>
+                <input id="snack_mue" type="number">
+                <label>ค่าอาหาร/คน (บาท)</label>
+                <input id="food_budget" type="number" step="0.01">
+                <label>รวมค่าวิทยากร (บาท)</label>
+                <input id="total_inst" type="number" readonly style="background:#f0f0f0;">
+                <label>รวมค่าอาหาร (บาท)</label>
+                <input id="total_food" type="number" readonly style="background:#f0f0f0;">
+                <label>รวมวัสดุ (บาท)</label>
+                <input id="total_material" type="number" readonly style="background:#f0f0f0;">
+                <label>รวมค่าอาหารว่าง (บาท)</label>
+                <input id="total_food_snack" type="number" readonly style="background:#f0f0f0;">
+                <label>รวมค่าใช้จ่ายทั้งหมด (บาท)</label>
+                <input id="total_all_budget" type="number" readonly style="background:#f0f0f0; font-weight:bold;">
+            </div>
+            <div class="form-actions">
+                <button type="button" class="backBtn">ย้อนกลับ</button>
+                <button type="button" id="saveBtn" class="confirmBtn">
+                    <i class="fas fa-save"></i> บันทึก
+                </button>
+            </div>
+        </div>
+
+    </main>
+</div>
+
+<!-- Hidden Fields -->
+<input type="hidden" id="batch_id">
+<input type="hidden" id="activity_id">
+<input type="hidden" id="course_id">
+<input type="hidden" id="location_id">
+<input type="hidden" id="instructor_id">
+<input type="hidden" id="controller_id">
+<input type="hidden" id="coordinator1_id">
+<input type="hidden" id="coordinator2_id">
+<input type="hidden" id="coordinator3_id">
+<input type="hidden" id="borrow_staff_id">
+<input type="hidden" id="is_edit_mode" value="false">
+
+<!-- ================================================================
+     Mode Selector Modal
+================================================================ -->
+<div id="modeModal" class="ms-overlay">
+    <div class="ms-card">
+
+        <div class="ms-header">
+            <div>
+                <h3 class="ms-title">เลือก Mode การทำงาน</h3>
+                <p class="ms-subtitle">ระบบจะ POST (สร้างใหม่) หรือ PUT (แก้ไข) ตาม mode ที่เลือก</p>
+            </div>
+            <button class="ms-close" onclick="closeModeModal()">✕</button>
+        </div>
+
+        <div class="ms-choices">
+            <!-- CREATE -->
+            <div class="ms-choice ms-choice--create" onclick="setCreateMode()">
+                <div class="ms-icon">➕</div>
+                <div>
+                    <div class="ms-label">สร้างรุ่นใหม่ </div>
+                    <div class="ms-desc">บันทึกข้อมูลใหม่เข้าฐานข้อมูล</div>
+                </div>
+                <span class="ms-arrow">›</span>
+            </div>
+
+            <!-- EDIT -->
+            <div class="ms-choice ms-choice--edit" id="editModeCard" onclick="toggleEditSearchInModal()">
+                <div class="ms-icon">✏️</div>
+                <div>
+                    <div class="ms-label">แก้ไขรุ่นที่มีอยู่ </div>
+                    <div class="ms-desc">ค้นหารุ่นแล้วโหลดข้อมูลมาแก้ไข</div>
+                </div>
+                <span class="ms-arrow" id="msEditArrow">›</span>
+            </div>
+        </div>
+
+        <!-- Edit Search -->
+        <div class="ms-search-box" id="msEditSearchBox">
+            <label class="ms-search-label">เลขรุ่นที่ต้องการแก้ไข</label>
+            <div class="ms-search-row">
+                <input
+                    id="msEditBatchInput"
+                    type="text"
+                    class="ms-search-input"
+                    placeholder="พิมพ์หรือเลือก เช่น 1/2568"
+                    list="msEditBatchDatalist"
+                    autocomplete="off"
+                >
+                <datalist id="msEditBatchDatalist"></datalist>
+                <button class="ms-go-btn" onclick="loadBatchForEdit()">โหลด →</button>
+            </div>
+            <div class="ms-error"   id="msEditError">⚠️ ไม่พบรุ่นนี้ในระบบ</div>
+            <div class="ms-loading" id="msEditLoading">⏳ กำลังโหลด…</div>
+        </div>
+
+        <button class="ms-cancel-btn" onclick="closeModeModal()">ยกเลิก</button>
+    </div>
+</div>
+
+<script src="../js/create.js"></script>
+<script src="../js/step.js"></script>
+<script src="../js/inout.js"></script>
+<script src="../js/mode-selector.js"></script>
+</body>
+</html>

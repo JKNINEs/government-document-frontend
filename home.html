@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <title>หน้าแรก | สพร.3 ชลบุรี</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/home.css?v=3">
+    <link rel="stylesheet" href="./css/calender.css">
+</head>
+<body>
+
+<!-- ===== Topbar ===== -->
+<header class="topbar">
+    <a href="home.html" class="logo-box">
+        <img src="./img/logo.png" alt="logo">
+    </a>
+
+<nav class="top-menu">
+    <a href="home.html" class="nav-link active">หน้าแรก</a>
+    <a href="index.html" class="nav-link">ระบบจัดทำเอกสาร</a>
+    <span class="divider"></span>
+    <a href="#contact-footer" class="nav-link">ติดต่อเรา</a>
+    <a href="user-guide.html" class="nav-link">คู่มือการใช้งาน</a>
+<button class="login-btn" id="authBtn">
+    เข้าสู่ระบบ
+</button>
+</nav>
+</header>
+
+<!-- ===== Hero Section ===== -->
+<section class="hero">
+    <!-- รูปพื้นหลัง (เปลี่ยนทีหลังได้) -->
+    <img src="./img/banner.png" alt="hero" class="hero-bg">
+
+    <div class="hero-text">
+        <h1>สถาบันพัฒนาฝีมือแรงงาน 3 ชลบุรี</h1>
+        <p>ฝ่ายพัฒนาฝีมือแรงงาน</p>
+    </div>
+</section>
+
+<!-- ===== Main Content ===== -->
+<section class="main-content">
+
+<div class="calendar-box">
+    <div class="calendar-header">
+        <button id="prevMonth">‹</button>
+        <div id="monthYear"></div>
+        <button id="nextMonth">›</button>
+    </div>
+
+    <div class="calendar-grid">
+        <div class="day-name">อา</div>
+        <div class="day-name">จ</div>
+        <div class="day-name">อ</div>
+        <div class="day-name">พ</div>
+        <div class="day-name">พฤ</div>
+        <div class="day-name">ศ</div>
+        <div class="day-name">ส</div>
+        <!-- วันที่ JS จะเติม -->
+    </div>
+</div>
+
+    <!-- Right Column -->
+    <div class="right-column">
+
+        <!-- Room Status -->
+        <div class="card room-status">
+            <h3>สถานะห้องฝึกอบรม</h3>
+            <div id="roomStatusList"></div>
+        </div>
+        
+        <!-- Document System -->
+        <a href="index.html" class="card doc-system link-card">
+            <img src="./img/word.png" alt="word">
+            <div>
+                <h2>ระบบ<br>จัดทำเอกสาร</h2>
+            </div>
+        </a>
+    </div>
+</section>
+
+<!-- ===== Event Modal ===== -->
+<div id="eventModal" class="modal">
+    <div class="modal-content">
+        <span id="closeModal" class="close">&times;</span>
+        <h3 id="modalDate"></h3>
+        <button id="addBookingBtn" class="add-btn">➕ จองห้อง</button>
+        <div id="modalEvents"></div>
+        <div id="bookingForm" class="booking-form" style="display:none;"></div>
+    </div>
+</div>
+
+<footer id="contact-footer" class="main-footer">
+    <div class="footer-container">
+        <div class="footer-logo-section">
+            <img src="./img/logo.png" alt="Logo" class="footer-logo">
+            <h2 class="agency-name">สถาบันพัฒนาฝีมือแรงงาน 3 ชลบุรี</h2>
+        </div>
+
+        <div class="footer-info-section">
+            <p><strong>ที่อยู่:</strong> 145 ตำบลหนองไม้แดง อำเภอเมือง จังหวัดชลบุรี 20000</p>
+            <p><strong>โทรศัพท์:</strong> 0-3827-6822, 0-3827-6824</p>
+            <p><strong>โทรสาร:</strong> 0-3810-9656</p>
+            <div class="social-icons">
+                <a href="https://www.facebook.com/tabunchon/?locale=th_TH" target="_blank"><img src="./img/facebook.png" alt="Facebook"></a>
+            </div>
+            <div class="footer-copyright-bar">
+                    <div class="copyright-content">
+                            <span class="sep">|</span> 
+                            ©Copyrights 2026 .[Chaddanai Intaem] [Kaopratya Khamkhong]
+                    </div>
+            </div>
+        </div>
+
+        <div class="footer-map-section">
+            <div id="map">
+                <iframe 
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3881.0592252989863!2d100.99126357455326!3d13.408659805146575!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x311d360139f27bb7%3A0x5cc18421bc0cb5df!2z4Liq4LiW4Liy4Lia4Lix4LiZ4Lie4Lix4LiS4LiZ4Liy4Lid4Li14Lih4Li34Lit4LmB4Lij4LiH4LiH4Liy4LiZIDMg4LiK4Lil4Lia4Li44Lij4Li1IEVFQw!5e0!3m2!1sth!2sus!4v1771652761919!5m2!1sth!2sus" 
+                    width="100%" height="200" style="border:0; border-radius: 8px;" allowfullscreen="" loading="lazy">
+                </iframe>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script src="./js/calender.js"></script>
+<script src="./js/core/navbar.js"></script>
+<script src="./js/inout.js"></script>
+<script src="./js/login.js"></script>
+<script src="./js/core/auth-btn.js"></script>
+
+</body>
+</html>

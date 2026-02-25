@@ -1,0 +1,817 @@
+* {
+    box-sizing: border-box;
+    font-family: "Tahoma", sans-serif;
+}
+
+/* ซ่อนทั้งหน้าจนกว่าจะรู้สถานะ login */
+
+/* body:not(.ready) {
+  visibility: hidden;
+} */
+
+/* เมื่อผ่านการเช็กแล้ว ค่อยโชว์ */
+/* body.ready {
+  visibility: visible;
+} */
+
+body {
+    margin: 0;
+    background: #f5f5f5;
+    padding-top: 70px; /* เท่าความสูง topbar */
+}
+
+.menu-group.hidden {
+    display: none;
+}
+
+.topbar {
+    position: fixed;          /* ล็อคติดจอ */
+    top: 0;
+    left: 0;
+    width: 100%;
+
+    height: 70px;             /* ความสูง navbar */
+    background: #6a1b9a;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0 30px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+    backdrop-filter: blur(6px);
+    z-index: 1000;
+}
+
+/* กล่องพื้นหลังโลโก้ */
+.logo-box {
+    width: 90px;               /* ทำให้เป็นสี่เหลี่ยม */
+    height: 70px;
+    background: #ffffff;       /* สีพื้นหลัง (ปรับได้) */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: -30px;
+}
+
+/* โลโก้ด้านใน */
+.logo-box img {
+    max-width: 48px;
+    max-height: 48px;
+}
+
+
+.top-menu {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+/* เมนูทั่วไป */
+.top-menu .nav-link {
+    color: #fff;
+    text-decoration: none;
+    padding: 6px 18px;
+    border-radius: 20px;
+    font-size: 16px;
+    transition: all 0.25s ease;
+}
+
+/* hover */
+.top-menu .nav-link:hover {
+    background: rgba(255, 255, 255, 0.18);
+}
+
+/* เมนูหน้าปัจจุบัน */
+.top-menu .nav-link.active {
+    background: #9b59b6;   /* ม่วงอ่อน */
+    color: #fff;
+    font-weight: 500;
+}
+
+.divider {
+    border-left: 2px solid #e0e0e0; /* สีเทาอ่อน */
+    height: 24px;                  /* ความสูงของเส้น */
+    align-self: center;            /* จัดให้อยู่กึ่งกลางแนวตั้ง */
+}
+
+/* ===== Auth Button Base ===== */
+/* ===== Auth Button ===== */
+.login-btn {
+  border: none;
+  padding: 8px 16px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 16px;
+  color: #fff;
+
+  /* สถานะเริ่มต้น: ยังไม่โชว์ */
+  opacity: 0;
+  transform: translateY(-4px);
+  pointer-events: none;
+
+  transition:
+    opacity 0.25s ease,
+    transform 0.25s ease,
+    background-color 0.25s ease;
+}
+
+/* ===== แสดงปุ่มอย่างเนียน ===== */
+.login-btn.ready {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+/* ===== LOGIN ===== */
+.login-btn.login {
+  background: #00983f;
+}
+
+/* ===== LOGOUT ===== */
+.login-btn.logout {
+  background: #e53935;
+}
+
+/* ===== Layout ===== */
+.container {
+    display: flex;
+    width: 100%;
+    max-width: 100vw; /* ห้ามกว้างเกินจอ */
+    overflow: hidden; /* กักขังเนื้อหาที่ล้น */
+}
+
+/* ===== Sidebar ===== */
+.sidebar {
+    width: 280px;
+    background: #ffffff;
+    border-right: 1px solid #e0e0e0;
+    
+    /* แก้ไขตรงนี้ */
+    position: fixed;     /* ล็อคตำแหน่งติดหน้าจอ */
+    top: 70px;           /* เริ่มต้นใต้ Topbar (ตาม padding-top ของ body คุณ) */
+    left: 0;
+    bottom: 0;           /* ยืดให้ถึงขอบล่างสุดของจอ */
+    height: calc(100vh - 70px); /* ความสูงคือจอทั้งหมดลบ Topbar */
+    
+    display: flex;
+    flex-direction: column;
+    z-index: 999;        /* ให้อยู่ใต้ Topbar (1000) */
+}
+
+.sidebar-content {
+    width: 100%;
+    overflow-y: auto; /* ย้ายการ scroll มาไว้ตรงนี้ */
+    flex-grow: 1;    /* ให้กินพื้นที่ที่เหลือทั้งหมด */
+}
+
+/* สไตล์หัวข้อหลัก (1 และ 2) */
+.menu-group-title {
+    display: flex;
+    justify-content: space-between; /* ดันข้อความไปซ้าย ลูกศรไปขวา */
+    align-items: center;
+    padding: 12px 15px;
+    cursor: pointer;
+    color: #6a1b9a; /* สีม่วงตามที่คุณใช้ */
+    font-weight: bold;
+    font-size: 0.9rem;
+    transition: background 0.3s;
+}
+
+.menu-group-title:hover {
+    background-color: #f5f5f5;
+}
+
+.sidebar-content {
+    width: 100%;
+}
+
+/* ===== Header Dashboard ===== */
+.sidebar-header {
+    background: #7b1fa2; /* สีม่วงเดียวกับ Dashboard */
+    color: white;
+    padding: 20px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    text-align: center;
+}
+
+/* ===== Sub Menu ===== */
+.sub-menu {
+    max-height: 0;
+    overflow: hidden;
+    /* เปลี่ยนจาก ease-in-out เป็น ease เพื่อให้จังหวะเริ่มไหลลื่นขึ้น */
+    transition: max-height 0.3s ease; 
+    display: flex;
+    flex-direction: column;
+    padding-left: 10px;
+    will-change: max-height; 
+}
+
+/* เพิ่มส่วนนี้: ถ้าหัวข้อแรกมีเมนูเดียว ไม่ต้องรอถึง 500px */
+.menu-group:first-child.active .sub-menu {
+    max-height: 60px; 
+}
+
+.sub-menu span {
+    padding: 8px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    /* เปลี่ยนจาก all เป็นแค่สีและพื้นหลัง */
+    transition: background 0.2s, color 0.2s; 
+    display: flex;
+    align-items: center;
+    padding-left: 15px;
+    margin-right: 15px;
+    color: #555;
+}
+
+/* ใส่ลูกศรหน้าเมนูย่อย */
+.sub-menu span::before {
+    content: ""; /* หรือใช้คำสั่ง \f105 ถ้าใช้ Font Awesome */
+    margin-right: 10px;
+    font-size: 12px;
+    color: #9b59b6; /* สีม่วงอ่อนเพื่อให้เข้ากับธีม */
+    transition: all 0.2s;
+}
+
+/* เมื่อเอาเมาส์วาง ให้ลูกศรขยับไปทางขวานิดหน่อย */
+.sub-menu span:hover::before {
+    margin-right: 15px;
+    color: #6a1b9a; /* เปลี่ยนเป็นม่วงเข้มขึ้น */
+}
+
+.sub-menu span:hover {
+    background: #f3e5f5; /* สีม่วงอ่อนเวลา Hover */
+    color: #7b1fa2;
+    cursor: pointer;
+    margin-right: 15px;
+}
+
+/* แสดงเมนูเมื่อ active */
+.menu-group.active .sub-menu {
+    max-height: 500px; /* ปรับให้พอดีกับจำนวนเมนูย่อย */
+    padding-bottom: 10px;
+}
+
+/* หมุนลูกศรเมื่อเปิดเมนู */
+.menu-group.active .arrow-icon {
+    transform: rotate(180deg);
+}
+
+.arrow-icon {
+    margin-left: auto; 
+    transition: transform 0.3s ease;
+    font-size: 12px;
+}
+
+/* ===== Menu ===== */
+.sidebar-menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+/* ส่วนท้ายของ Sidebar */
+.sidebar-footer {
+    padding: 20px 15px; /* เว้นระยะห่างจากขอบล่างและด้านข้าง */
+    border-top: 1px solid #eee; /* เส้นแบ่งจางๆ ให้ดูเป็นระเบียบ */
+}
+
+/* ปรับแต่งปุ่มเพิ่มเติมให้เข้ากับ Sidebar */
+.excel-btn {
+    width: 100%;
+    background-color: #008a3e;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: background 0.3s;
+}
+
+.excel-btn:hover {
+    background-color: #006b2d;
+}
+
+.menu-item {
+    padding: 14px 16px;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.menu-item:hover {
+    background: #f5faff;
+}
+
+/* ลูกศร */
+.arrow {
+    font-size: 12px;
+}
+
+/* Content */
+.content {
+    flex: 1;
+    min-width: 0;
+    padding: 30px;
+    
+    /* เพิ่มตรงนี้ */
+    margin-left: 280px; /* เท่ากับความกว้างของ Sidebar */
+}
+
+.page-header {
+    display: flex;
+    align-items: center;
+    margin-top: -15px;
+    justify-content: space-between; /* ซ้าย-ขวาคนละฝั่ง */
+}
+
+/* ฝั่งซ้าย */
+.page-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 18px;
+    font-weight: bold;
+    color: #6a1b9a;
+    cursor: pointer;
+}
+
+.page-title:hover {
+    text-decoration: underline;
+}
+
+.title-icon {
+    width: 36px;
+    height: auto;
+}
+
+/* ===== Search ===== */
+.search-wrapper {
+    display: flex;
+    align-items: center;
+}
+
+.btn-new {
+    background-color: #28a745;
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    text-decoration: none
+}
+
+.btn-new:hover {
+    background-color: #218838;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.search-input {
+    width: 0;
+    opacity: 0;
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    transition: all 0.3s ease;
+    margin-right: 8px;
+}
+
+.search-wrapper.active .search-input {
+    width: 400px;
+    opacity: 1;
+}
+
+.search-icon {
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+}
+
+
+.form-box {
+    background: #e6e6e6;
+    padding: 20px;
+    max-width: auto;
+    margin: auto;
+    border-radius: 8px;
+}
+
+/* ===== Form Row ===== */
+.form-row {
+    display: grid;
+    grid-template-columns: 180px 1fr 180px 1fr;
+    gap: 10px 12px;
+    margin: 10px 0;
+    align-items: center;
+}
+
+/* แถวเต็ม 1 ช่อง */
+.form-row.full {
+    grid-template-columns: 180px var(--input-width);
+}
+
+:root {
+    --input-width: 402px; /* ปรับได้ตามดีไซน์ */
+}
+
+/* ===== Label ===== */
+label {
+    font-size: 14px;
+    color: #333;
+    white-space: nowrap;
+}
+
+/* ===== Input / Select ===== */
+input,
+select {
+    height: 36px;
+    padding: 0 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    width: 100%;
+    font-size: 14px;
+    background: #fff;
+}
+
+
+
+
+/* ===== Responsive ===== */
+@media (max-width: 900px) {
+    .form-row,
+    .form-row.full {
+        grid-template-columns: 1fr;
+    }
+
+    label {
+        margin-top: 6px;
+        white-space: normal;
+    }
+}
+
+.content .form-step {
+    display: none ;
+}
+
+.content .form-step.active {
+    display: block ;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.form-actions button {
+    padding: 8px 22px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.nextBtn {
+    background: #7b1fa2;
+    color: #fff;
+}
+
+.backBtn {
+    background: #ccc;
+}
+
+button[type="submit"] {
+    background: #4caf50;
+    color: #fff;
+}
+
+.confirmBtn {
+    background-color: #7b1fa2;
+    color: #fff;
+}
+
+
+
+/* ===== Select Wrapper ===== */
+.select-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.select-wrapper1 {
+  position: relative;
+  width: 100%;
+}
+
+/* ===== Dropdown ===== */
+.select-dropdown {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  width: 100%;
+  min-width: 200px; 
+
+  background: #fff;
+  border-radius: 10px;
+  border: 1px solid #bbb;
+
+  box-shadow: 0 12px 28px rgba(0,0,0,0.25);
+
+  max-height: 140px;
+  overflow-y: auto;
+
+  display: none;
+  z-index: 99999; /* 🔥 ตัวเดียวพอ */
+}
+
+/* option */
+.select-option {
+  padding: 10px 14px;
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.select-option:hover {
+  background: #ede7f6;
+  color: #4a148c;
+}
+
+.list-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+}
+
+.toggle-btn {
+    background: #7b1fa2;
+    color: #fff;
+    border: none;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.toggle-btn:hover {
+    background: #6a1b9a;
+}
+
+/* กล่องรายชื่อ */
+.applicant-names {
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    padding: 14px 18px;
+    font-size: 14px;
+    line-height: 1.8;
+
+    column-count: 2;
+    column-gap: 40px;
+}
+
+/* 🔥 ซ่อนไว้ก่อน */
+.applicant-names.hidden {
+    display: none !important;
+}
+
+.step-header {
+    display: flex;
+    align-items: center; /* จัดให้ปุ่มทุกตัวอยู่ในแนวระนาบเดียวกัน */
+    justify-content: space-between; /* ดันปุ่มแท็บซ้าย ดัน header-actions ขวา */
+    gap: 10px;
+    margin-bottom: 20px;
+    padding: 10px 0; /* ปรับขนาดความสูงของพื้นที่แถวนี้ */
+    width: 100%;
+}
+
+.header-actions {
+    margin-left: auto; /* ช่วยยืนยันการชิดขวาในกรณีที่มี element อื่นแทรก */
+    display: flex;
+    align-items: center;
+}
+
+.step-tab {
+    border: none;
+    padding: 8px 16px;
+    border-radius: 20px;
+    background: #ddd;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all .2s;
+}
+
+.step-tab.active {
+    background: #0080ff;
+    color: #fff;
+    font-weight: 500;
+}
+
+.step-tab:hover {
+    background: #00478e;
+    color: #fff;
+}
+
+/* --- Staff Table Styles --- */
+.staff-table-container {
+    background: #ffffff;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+    width: 100%;            /* กว้างเท่าหน้าจอที่เหลือ */
+    max-width: 100%;        /* ห้ามกว้างเกินจอเด็ดขาด */
+    box-sizing: border-box; 
+    overflow: hidden;       /* ถ้ามีอะไรหลุดจาก Container นี้ให้ตัดทิ้ง/ซ่อนทันที */
+}
+
+.staff-header {
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.staff-header h3 {
+    margin: 0;
+    color: #333;
+    font-size: 1.25rem;
+}
+
+.action-buttons {
+    display: flex;          /* เปิดใช้งาน Flexbox */
+    justify-content: center; /* จัดให้อยู่กึ่งกลางแนวนอน */
+    gap: 8px;               /* ระยะห่างระหว่างปุ่ม (ปรับตัวเลขได้) */
+    align-items: center;    /* จัดให้อยู่กึ่งกลางแนวตั้ง */
+}
+
+/* พื้นที่เลื่อนตาราง */
+.table-scroll-area {
+    width: 100%;            /* กว้าง 100% ของ Container แม่ */
+    max-width: 100%; 
+    height: calc(100vh - 300px);
+    overflow-x: auto;       /* เปิดเลื่อนแนวนอน */
+    overflow-y: auto;       /* เปิดเลื่อนแนวตั้ง */
+    border: 1px solid #e0e0e0;
+    position: relative;
+    display: block;         /* บังคับให้เป็น Block เพื่อให้กว้างเต็มพื้นที่ */
+    clear: both;            /* ป้องกันการไหลไปทับ Float อื่นๆ */
+}
+
+.staff-table {
+    width: 100%;
+    /* ปรับ min-width ให้พอดีกับคอลัมน์ (เช่น 1200px หรือ 1500px) */
+    /* เพื่อให้ในโน้ตบุ๊กมัน "กาง" ออกข้างในพื้นที่เลื่อน แทนที่จะบีบจนเละ */
+    min-width: 1200px;      
+    border-collapse: separate; 
+    border-spacing: 0;
+    table-layout: auto;     /* ให้บราวเซอร์คำนวณความกว้างตามเนื้อหาจริง */
+}
+
+/* หัวตาราง Sticky */
+.staff-table thead th {
+    background-color: #7b1fa2;
+    color: #ffffff;
+    font-weight: 600;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    padding: 12px 15px;
+    text-align: left;
+    white-space: nowrap;
+    border-bottom: 1px solid #eee;
+    border-right: 1px solid rgba(255,255,255,0.1); /* เส้นแบ่งจางๆ ให้หัวตาราง */
+}
+
+/* เนื้อหาตาราง */
+.staff-table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+    border-right: 1px solid #eee;
+    font-size: 14px;
+}
+
+.staff-table td:last-child, 
+.staff-table th:last-child {
+    border-right: none;
+}
+
+/* Hover & Last-row fix */
+.staff-table tbody tr:hover {
+    background-color: #f8f0fb; /* เลือกสีม่วงอ่อนตามที่คุณแก้ล่าสุด */
+}
+
+.staff-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* --- Buttons --- */
+.add-btn, .btn-edit, .btn-delete {
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+/* สไตล์สำหรับปุ่ม Excel */
+.excel-btn {
+    background-color: #008a3e; /* สีเขียวเข้มแบบ Excel */
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: background-color 0.3s;
+}
+
+.excel-btn:hover {
+    background-color: #145532; /* สีจะเข้มขึ้นเมื่อเอาเมาส์ไปวาง */
+}
+
+.add-btn {
+    background-color: #009dff;
+    color: white;
+    padding: 8px 16px;
+    font-size: 14px;
+}
+.add-btn:hover { background-color: #218838; }
+
+.btn-edit {
+    background-color: #ffc107;
+    color: #000;
+    padding: 5px 10px;
+    margin-right: 5px;
+}
+.btn-edit:hover { background-color: #e0a800; }
+
+.btn-delete {
+    background-color: #dc3545;
+    color: #fff;
+    padding: 5px 10px;
+}
+.btn-delete:hover { background-color: #c82333; }
+
+/* Animation (ถ้ามีการใช้ใน JS) */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.applicant-item {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+    font-size: 14px;
+    color: #333;
+}
+.applicant-item:hover {
+    background-color: #f9f9f9;
+}
+
+  .container1 {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        min-height: 100vh;
+        background-color: #f4f7f6; /* สีพื้นหลังอ่อนๆ ให้ดูสบายตา */
+        padding: 20px;
+        font-family: 'Sarabun', sans-serif;
+    }
+
+    /* จัดระเบียบส่วน Content กลาง */
+     .content1 {
+        width: 100%;
+        max-width: 1000px; /* จำกัดความกว้างสูงสุด */
+        background: #ffffff;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    }
+
+
+

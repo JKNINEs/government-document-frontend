@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>จัดการรายการยืมเงิน | สพร.3 ชลบุรี</title>
+    <link rel="stylesheet" href="../css/index.css">
+    <link rel="stylesheet" href="../css/form.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-overlay.show { display: flex; }
+
+        .modal-box {
+            background: white;
+            border-radius: 12px;
+            width: 620px;
+            max-width: 95vw;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.25);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 24px;
+            background: #6a1b9a;
+            border-radius: 12px 12px 0 0;
+        }
+
+        .modal-header h3 { margin: 0; color: white; font-size: 18px; }
+
+        .modal-close {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+            color: white;
+            width: auto;
+            height: auto;
+            padding: 4px 10px;
+            border-radius: 6px;
+        }
+
+        .modal-close:hover { background: rgba(255,255,255,0.35); }
+    </style>
+</head>
+<body>
+
+<!-- Topbar -->
+<header class="topbar">
+    <a href="../index.html" class="logo-box">
+        <img src="../img/logo.png" alt="logo">
+    </a>
+    <nav class="top-menu">
+        <a href="../home.html" class="nav-link">หน้าแรก</a>
+        <a href="../index.html" class="nav-link active">ระบบจัดทำเอกสาร</a>
+    </nav>
+</header>
+
+<div class="container1">
+    <main class="content1">
+
+        <!-- Page Header -->
+        <div class="page-header">
+            <div class="page-title">
+                <i class="fas fa-file-invoice-dollar" style="font-size:22px;"></i>
+                <h2 style="margin:0;">จัดการรายการยืมเงิน</h2>
+            </div>
+            <div class="header-actions" style="gap:10px;">
+                <a href="../index.html" class="btn-new" style="background:#6c757d;">
+                    <i class="fas fa-arrow-left"></i> กลับ
+                </a>
+                <button class="btn-new" onclick="openModal('create')">
+                    <i class="fas fa-plus"></i> เพิ่มรายการใหม่
+                </button>
+            </div>
+        </div>
+
+        <!-- Table -->
+        <div class="staff-table-container">
+            <div class="table-scroll-area">
+                <table class="staff-table">
+                    <thead>
+                        <tr>
+                            <th>รหัสรุ่น</th>
+                            <th>เลขที่สัญญา</th>
+                            <th style="text-align:center;">จำนวนหัวที่ยืม</th>
+                            <th>วันที่ยืม</th>
+                            <th>วันที่หักล้าง</th>
+                            <th>จำนวนคนมาจริงวันที่ 1</th>
+                            <th>จำนวนคนมาจริงวันที่ 2</th>
+                            <th style="text-align:center;">จัดการ</th>
+                        </tr>
+                    </thead>
+                    <tbody id="loanTableBody">
+                        <tr>
+                            <td colspan="6" style="text-align:center; padding:40px; color:#6a1b9a;">
+                                <i class="fas fa-spinner fa-spin"></i> กำลังโหลดข้อมูล...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </main>
+</div>
+
+<!-- Modal -->
+<div class="modal-overlay" id="loanModal">
+    <div class="modal-box">
+        <div class="modal-header">
+            <h3 id="modalTitle">เพิ่มรายการยืมเงิน</h3>
+            <button class="modal-close" onclick="closeModal()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+
+        <form id="loanForm" class="form-container">
+
+            <div class="form-group">
+                <label>รหัสรุ่นฝึกอบรม <span style="color:red;">*</span></label>
+                <input type="text" id="loanBatchCode" placeholder="เช่น 69001" required>
+            </div>
+
+            <div class="form-group">
+                <label>เลขที่สัญญา</label>
+                <input type="text" id="loanContractNo" placeholder="เลขที่สัญญา">
+            </div>
+
+            <div class="form-group">
+                <label>จำนวนคน</label>
+                <input type="number" id="loanHeadCount" placeholder="จำนวนคน" min="0">
+            </div>
+
+            <div class="form-group">
+                <label>วันที่ยืม</label>
+                <input type="date" id="loanLoadDate">
+            </div>
+
+            <div class="form-group">
+                <label>วันที่หักล้าง</label>
+                <input type="date" id="loanClearanceDate">
+            </div>
+
+            <div class="form-group">
+                <label>จำนวนคนวันที่ 1</label>
+                <input type="number" id="loanClearanceDay1" placeholder="จำนวนคน" min="0">
+            </div>
+
+            <div class="form-group">
+                <label>จำนวนคนวันที่ 2</label>
+                <input type="number" id="loanClearanceDay2" placeholder="จำนวนคน" min="0">
+            </div>
+
+            <div class="form-actions">
+                <button type="button" class="btn-secondary" onclick="closeModal()">ยกเลิก</button>
+                <button type="submit" class="btn-primary">
+                    <i class="fas fa-save"></i> บันทึก
+                </button>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+<script src="../js/loan.js"></script>
+</body>
+</html>

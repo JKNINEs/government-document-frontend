@@ -1,0 +1,237 @@
+* {
+    box-sizing: border-box;
+    font-family: "Tahoma", sans-serif;
+}
+
+body {
+    margin: 0;
+    background: #f5f5f5;
+    padding-top: 70px; /* เท่าความสูง topbar */
+}
+
+.topbar {
+    position: fixed;          /* ล็อคติดจอ */
+    top: 0;
+    left: 0;
+    width: 100%;
+
+    height: 70px;             /* ความสูง navbar */
+    background: #6a1b9a;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0 30px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+    backdrop-filter: blur(6px);
+    z-index: 1000;
+}
+
+/* กล่องพื้นหลังโลโก้ */
+.logo-box {
+    width: 90px;               /* ทำให้เป็นสี่เหลี่ยม */
+    height: 70px;
+    background: #ffffff;       /* สีพื้นหลัง (ปรับได้) */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: -30px;
+}
+
+/* โลโก้ด้านใน */
+.logo-box img {
+    max-width: 48px;
+    max-height: 48px;
+}
+
+
+.top-menu {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+/* เมนูทั่วไป */
+.top-menu .nav-link {
+    color: #fff;
+    text-decoration: none;
+    padding: 6px 18px;
+    border-radius: 20px;
+    font-size: 16px;
+    transition: all 0.25s ease;
+}
+
+/* hover */
+.top-menu .nav-link:hover {
+    background: rgba(255, 255, 255, 0.18);
+}
+
+/* เมนูหน้าปัจจุบัน */
+.top-menu .nav-link.active {
+    background: #9b59b6;   /* ม่วงอ่อน */
+    color: #fff;
+    font-weight: 500;
+}
+
+.login-btn {
+  background: #00983f;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 20px;
+  color: #fff;
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 1;          /* 🔥 ตัวนี้แหละ */
+  text-decoration: none;
+  display: inline-flex;    /* 🔥 จัดกลางแบบไม่เกิดเส้น */
+  align-items: center;
+}
+
+.login-btn,
+.login-bltn:hover,
+.login-btn:focus,
+.login-btn:active {
+  text-decoration: none;
+}
+
+/* ===== Background ===== */
+.login-bg {
+  min-height: calc(100vh - 70px);
+
+  background-image: url("../img/bg1.png");
+  background-size: cover;        /* เต็มจอ ไม่แตก */
+  background-position: center;   /* จัดกึ่งกลาง */
+  background-repeat: no-repeat;  /* ไม่ซ้ำ */
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* ===== Center content ===== */
+.login-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;       /* 🔥 สำคัญ */
+  text-align: center;
+  gap: 12px;
+  position: relative;
+  z-index: 1;
+}
+
+.center-logo {
+  width: 80px;
+  margin-bottom: 10px;
+}
+
+.login-wrapper h1 {
+  margin: -10px 0px;
+  font-size: 32px;
+}
+
+.login-wrapper h1 span {
+  color: #2300d1;
+}
+
+.subtitle {
+  font-size: 16px;
+  opacity: 0.9;
+  margin-bottom: -10px;
+  color: rgb(0, 0, 0);
+}
+
+/* ===== Login Box ===== */
+.login-box {
+  margin-top: 20px;
+  background: rgba(255,255,255,0.92);
+  padding: 25px 30px;
+  border-radius: 16px;
+  width: 340px;
+  color: #333;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+}
+
+.login-box input {
+  width: 100%;
+  padding: 10px 12px;
+  margin-bottom: 12px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
+
+.image-btn {
+  position: relative;
+  border: none;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+/* รูปปุ่ม */
+.image-btn img {
+  width: 180px;      /* ปรับความยาวปุ่มได้ */
+  height: auto;
+}
+
+.image-btn span {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  /* 👇 ขยับตำแหน่ง */
+  transform: translate(12px, -3px);  
+  /* x = ซ้าย–ขวา | y = บน–ล่าง */
+
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  text-shadow: 0 2px 6px rgba(0,0,0,0.4);
+  pointer-events: none;
+}
+
+.forgot {
+  display: block;
+  margin-top: 10px;
+  font-size: 12px;
+  color: #666;
+  text-decoration: none;
+}
+
+.logo1 img {
+  height: 150px;        /* ปรับได้ */
+  width: auto;
+
+  filter:
+    drop-shadow(0 4px 8px rgba(0,0,0,0.35))
+    drop-shadow(0 0 6px rgba(255,215,0,0.5));
+}
+
+.logo1 img {
+  transition: filter 0.25s ease, transform 0.25s ease;
+}
+
+.logo1 img:hover {
+  transform: translateY(-1px);
+  filter:
+    drop-shadow(0 6px 14px rgba(0,0,0,0.45))
+    drop-shadow(0 0 10px rgba(255,215,0,0.7));
+}
+
+.lock-icon img {
+    width: 100px;   /* ปรับขนาดได้ */
+    height: auto;
+    display: block;
+}
+
+.lock-icon {
+  margin-top: -10px;
+  display: flex;
+  justify-content: center;
+}
+
+

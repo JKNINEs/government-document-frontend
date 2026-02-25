@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>จัดการผู้ใช้ - Admin</title>
+  <link rel="stylesheet" href="/css/admin.css" />
+</head>
+<body>
+
+<div class="admin-layout">
+
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-icon">⚙️</div>
+      <div>
+        <div class="logo-text">Admin Panel</div>
+        <div class="logo-sub">TRAINING SYSTEM</div>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="nav-section-title">หลัก</div>
+      <a href="dashboard.html" class="nav-item">
+        <span class="nav-icon">📊</span> Dashboard
+      </a>
+      <a href="users.html" class="nav-item active">
+        <span class="nav-icon">👥</span> จัดการผู้ใช้
+        <span class="nav-badge" id="userCount">—</span>
+      </a>
+      <a href="templates.html" class="nav-item">
+        <span class="nav-icon">📄</span> จัดการ Template
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="admin-profile">
+        <div class="profile-avatar" id="avatarLetter">A</div>
+        <div>
+          <div class="profile-name" id="profileName">Admin</div>
+          <div class="profile-role">ADMINISTRATOR</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <div class="main-content">
+    <header class="topbar">
+      <div class="topbar-left">
+        <div>
+          <div class="page-title">จัดการผู้ใช้</div>
+          <div class="page-breadcrumb">admin / users</div>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <button class="btn btn-primary" onclick="openAddModal()">➕ เพิ่มผู้ใช้</button>
+        <button class="logout-btn" onclick="logout()">🚪 ออกจากระบบ</button>
+      </div>
+    </header>
+
+    <main class="page-content">
+      <div class="card">
+
+        <!-- Toolbar -->
+        <div class="table-toolbar">
+          <div class="search-box">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="searchInput" placeholder="ค้นหาชื่อผู้ใช้ หรือชื่อ-นามสกุล..." oninput="filterTable()" />
+          </div>
+          <select class="filter-select" id="roleFilter" onchange="filterTable()">
+            <option value="">ทุก Role</option>
+            <option value="admin">Admin</option>
+            <option value="user">User</option>
+          </select>
+        </div>
+
+        <!-- Table -->
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Username</th>
+                <th>ชื่อ-นามสกุล</th>
+                <th>Role</th>
+                <th>วันที่สร้าง</th>
+                <th>จัดการ</th>
+              </tr>
+            </thead>
+            <tbody id="usersBody">
+              <tr class="loading-row">
+                <td colspan="6"><span class="spinner"></span> กำลังโหลด...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Footer -->
+        <div class="table-footer">
+          <span id="tableInfo">—</span>
+        </div>
+
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- ========== Modal เพิ่ม/แก้ไขผู้ใช้ ========== -->
+<div class="modal-overlay" id="userModal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="modalTitle">เพิ่มผู้ใช้ใหม่</div>
+      <button class="modal-close" onclick="closeModal('userModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="editUserId" />
+
+      <div class="form-group">
+        <label class="form-label">Username *</label>
+        <input type="text" class="form-input" id="inputUsername" placeholder="กรอก username" />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">รหัสผ่าน <span id="pwHintLabel" style="color:var(--text-muted);font-weight:400;">(ไม่กรอก = ไม่เปลี่ยน)</span></label>
+        <div class="input-group">
+          <input type="password" class="form-input" id="inputPassword" placeholder="กรอกรหัสผ่าน" />
+          <button class="input-group-addon" onclick="togglePw()" type="button" id="pwToggle">👁️</button>
+        </div>
+        <div class="form-hint" id="pwHint"></div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">ชื่อ-นามสกุล *</label>
+        <input type="text" class="form-input" id="inputFullname" placeholder="กรอกชื่อ-นามสกุล" />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Role *</label>
+        <select class="form-select" id="inputRole">
+          <option value="user">User</option>
+          <option value="admin">Admin</option>
+        </select>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('userModal')">ยกเลิก</button>
+      <button class="btn btn-primary" onclick="saveUser()" id="saveBtn">💾 บันทึก</button>
+    </div>
+  </div>
+</div>
+
+<!-- ========== Modal ยืนยันลบ ========== -->
+<div class="modal-overlay confirm-modal" id="confirmModal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">ยืนยันการลบ</div>
+      <button class="modal-close" onclick="closeModal('confirmModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="confirm-icon">🗑️</div>
+      <p class="confirm-text">
+        คุณต้องการลบผู้ใช้ <span class="confirm-name" id="confirmName"></span> ใช่หรือไม่?<br />
+        <span style="color:var(--danger);font-size:12px;margin-top:4px;display:block;">การกระทำนี้ไม่สามารถย้อนกลับได้</span>
+      </p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('confirmModal')">ยกเลิก</button>
+      <button class="btn btn-danger" onclick="confirmDelete()" id="confirmDeleteBtn">🗑️ ลบ</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast-container" id="toastContainer"></div>
+
+<script src="/js/admin/utils.js"></script>
+<script src="/js/admin/user.js"></script>
+</body>
+</html>

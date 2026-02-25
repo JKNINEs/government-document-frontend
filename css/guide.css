@@ -1,0 +1,258 @@
+* {
+    box-sizing: border-box;
+    font-family: "Tahoma", sans-serif;
+}
+
+body {
+    margin: 0;
+    background-color: #f8f9fa;
+    color: #333;
+}
+
+.topbar {
+    position: fixed;          /* ล็อคติดจอ */
+    top: 0;
+    left: 0;
+    width: 100%;
+
+    height: 70px;             /* ความสูง navbar */
+    background: #6a1b9a;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0 30px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+    backdrop-filter: blur(6px);
+    z-index: 1000;
+}
+
+/* กล่องพื้นหลังโลโก้ */
+.logo-box {
+    width: 90px;               /* ทำให้เป็นสี่เหลี่ยม */
+    height: 70px;
+    background: #ffffff;       /* สีพื้นหลัง (ปรับได้) */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: -30px;
+}
+
+/* โลโก้ด้านใน */
+.logo-box img {
+    max-width: 48px;
+    max-height: 48px;
+}
+
+
+.top-menu {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+/* เมนูทั่วไป */
+.top-menu .nav-link {
+    color: #fff;
+    text-decoration: none;
+    padding: 6px 18px;
+    border-radius: 20px;
+    font-size: 16px;
+    transition: all 0.25s ease;
+}
+
+/* hover */
+.top-menu .nav-link:hover {
+    background: rgba(255, 255, 255, 0.18);
+}
+
+/* เมนูหน้าปัจจุบัน */
+.top-menu .nav-link.active {
+    background: #9b59b6;   /* ม่วงอ่อน */
+    color: #fff;
+    font-weight: 500;
+}
+
+/* ===== Auth Button Base ===== */
+/* ===== Auth Button ===== */
+.login-btn {
+  border: none;
+  padding: 8px 16px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 16px;
+  color: #fff;
+
+  /* สถานะเริ่มต้น: ยังไม่โชว์ */
+  opacity: 0;
+  transform: translateY(-4px);
+  pointer-events: none;
+
+  transition:
+    opacity 0.25s ease,
+    transform 0.25s ease,
+    background-color 0.25s ease;
+}
+
+/* ===== แสดงปุ่มอย่างเนียน ===== */
+.login-btn.ready {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+/* ===== LOGIN ===== */
+.login-btn.login {
+  background: #00983f;
+}
+
+/* ===== LOGOUT ===== */
+.login-btn.logout {
+  background: #e53935;
+}
+
+.manual-layout {
+    display: flex;
+    margin-top: 70px; /* เว้นที่ให้ Topbar */
+}
+
+/* Sidebar สไตล์เดียวกับ Dashboard ของคุณ */
+.manual-sidebar {
+    width: 280px;
+    background: #ffffff;
+    border-right: 1px solid #e0e0e0;
+
+    /* --- ส่วนที่แก้ไข --- */
+    position: fixed;        /* ล็อคติดจอ */
+    top: 70px;              /* เริ่มใต้ Topbar */
+    bottom: 0;              /* ยาวถึงพื้น */
+    left: 0;
+    height: calc(100vh - 70px); /* สูงเท่าที่เหลือของจอ */
+    /* ------------------ */
+
+    display: flex;
+    flex-direction: column;
+    z-index: 99; 
+}
+
+.sidebar-header {
+    background: #7b1fa2; /* สีม่วงเดียวกับ Dashboard */
+    color: white;
+    padding: 20px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    text-align: center;
+}
+
+.manual-nav {
+    padding: 15px;
+    overflow-y: auto;
+}
+
+.nav-group {
+    margin-bottom: 20px;
+}
+
+.group-title {
+    display: block;
+    font-size: 0.9rem;
+    color: #7b1fa2;
+    font-weight: bold;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+}
+
+.nav-item {
+    display: block;
+    padding: 10px 12px;
+    color: #555;
+    text-decoration: none;
+    border-radius: 6px;
+    transition: 0.2s;
+    font-size: 0.95rem;
+}
+
+.nav-item:hover {
+    background: #f3e5f5;
+    color: #7b1fa2;
+}
+
+/* พื้นที่เนื้อหา */
+.manual-content {
+    flex: 1;
+    padding: 40px 60px;
+    line-height: 1.6;
+
+    /* --- ส่วนที่แก้ไข --- */
+    margin-left: 280px;     /* ดันเนื้อหาออกไปเท่าความกว้าง Sidebar */
+    max-width: 1200px;      /* ปรับให้กว้างขึ้นหน่อยเพื่อให้ดูเนื้อหาง่าย */
+    /* ------------------ */
+}
+
+.doc-section h1 {
+    color: #6a1b9a;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 15px;
+    margin-bottom: 30px;
+}
+
+.step-card {
+    background: white;
+    border-radius: 12px;
+    padding: 25px;
+    margin-bottom: 25px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    border-left: 5px solid #7b1fa2;
+}
+
+.img-placeholder {
+    background: #eee;
+    border: 2px dashed #ccc;
+    border-radius: 8px;
+    margin: 15px 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 200px;
+    color: #888;
+}
+
+.badge-purple {
+    background: #7b1fa2;
+    color: white;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.9rem;
+}
+
+/* คลาสสำหรับซ่อน Section ที่ไม่ได้เลือก */
+.doc-section {
+    display: none;
+    animation: fadeIn 0.4s ease;
+}
+
+/* คลาสสำหรับแสดง Section ที่เลือก */
+.doc-section.active {
+    display: block;
+}
+
+/* คลาสสำหรับเน้นเมนูที่กำลังแสดงผล (จะถูกเพิ่มด้วย JS) */
+.nav-item.active-menu {
+    background-color: #f3e5f5 !important;
+    color: #7b1fa2 !important;
+    font-weight: bold;
+    border-right: 4px solid #7b1fa2;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.divider {
+    border-left: 2px solid #e0e0e0; /* สีเทาอ่อน */
+    height: 24px;                  /* ความสูงของเส้น */
+    align-self: center;            /* จัดให้อยู่กึ่งกลางแนวตั้ง */
+}

@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>จัดการ Template - Admin</title>
+  <link rel="stylesheet" href="/css/admin.css" />
+  <style>
+    /* ── Template Grid ── */
+    .template-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+      padding: 24px;
+    }
+
+    .template-loading,
+    .template-empty,
+    .template-error {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+    .template-error { color: var(--danger); }
+
+    /* ── Template Card ── */
+    .template-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      transition: var(--transition);
+    }
+    .template-card:hover {
+      border-color: var(--border-light);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow);
+    }
+
+    .template-card-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+    }
+
+    .template-doc-icon { font-size: 34px; line-height: 1; }
+
+    .template-badge {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 9px;
+      border-radius: 20px;
+    }
+    .badge-ok {
+      background: var(--success-bg);
+      color: var(--success);
+      border: 1px solid rgba(16, 185, 129, 0.25);
+    }
+    .badge-missing {
+      background: var(--danger-bg);
+      color: var(--danger);
+      border: 1px solid rgba(239, 68, 68, 0.25);
+    }
+
+    .template-display-name {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 3px;
+    }
+    .template-filename {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-family: 'IBM Plex Mono', monospace;
+      margin-bottom: 8px;
+    }
+    .template-meta {
+      display: flex;
+      gap: 14px;
+      font-size: 11px;
+      color: var(--text-muted);
+      font-family: 'IBM Plex Mono', monospace;
+    }
+
+    .template-card-footer {
+      display: flex;
+      gap: 8px;
+      margin-top: auto;
+    }
+    .template-card-footer .btn { flex: 1; justify-content: center; }
+
+    /* ── Info Banner ── */
+    .info-banner {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 24px 24px 0;
+      padding: 12px 16px;
+      background: var(--accent-glow);
+      border: 1px solid rgba(59, 130, 246, 0.2);
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+
+    /* ── Upload Drop Zone ── */
+    .upload-drop-zone {
+      border: 2px dashed var(--border-light);
+      border-radius: var(--radius);
+      padding: 36px 16px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      transition: var(--transition);
+      cursor: pointer;
+    }
+    .upload-drop-zone.drag-over {
+      border-color: var(--accent);
+      background: var(--accent-glow);
+    }
+    .upload-drop-zone .drop-icon { font-size: 40px; }
+    .upload-drop-zone .drop-hint { font-size: 13px; color: var(--text-muted); }
+    .upload-drop-zone .drop-types { font-size: 11px; color: var(--text-muted); opacity: 0.6; }
+
+    .selected-file {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 12px;
+      padding: 10px 14px;
+      background: var(--accent-glow);
+      border: 1px solid rgba(59, 130, 246, 0.2);
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+    }
+    .selected-file .file-name {
+      flex: 1;
+      color: var(--text-primary);
+      font-weight: 500;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .selected-file .file-size {
+      color: var(--text-muted);
+      font-size: 11px;
+      font-family: 'IBM Plex Mono', monospace;
+    }
+    .remove-file-btn {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 14px;
+      padding: 0 2px;
+      transition: var(--transition);
+    }
+    .remove-file-btn:hover { color: var(--danger); }
+
+    .upload-progress { margin-top: 14px; }
+    .progress-bar {
+      height: 6px;
+      background: var(--border);
+      border-radius: 99px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      background: var(--accent);
+      border-radius: 99px;
+      width: 0%;
+      transition: width 0.3s ease;
+      box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+    }
+    .progress-label {
+      margin-top: 6px;
+      font-size: 11px;
+      color: var(--text-muted);
+      text-align: right;
+      font-family: 'IBM Plex Mono', monospace;
+    }
+  </style>
+</head>
+<body>
+
+<div class="admin-layout">
+
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-icon">⚙️</div>
+      <div>
+        <div class="logo-text">Admin Panel</div>
+        <div class="logo-sub">TRAINING SYSTEM</div>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="nav-section-title">หลัก</div>
+      <a href="dashboard.html" class="nav-item">
+        <span class="nav-icon">📊</span> Dashboard
+      </a>
+      <a href="users.html" class="nav-item">
+        <span class="nav-icon">👥</span> จัดการผู้ใช้
+        <span class="nav-badge" id="userCount">—</span>
+      </a>
+      <a href="templates.html" class="nav-item active">
+        <span class="nav-icon">📄</span> จัดการ Template
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="admin-profile">
+        <div class="profile-avatar" id="avatarLetter">A</div>
+        <div>
+          <div class="profile-name" id="profileName">Admin</div>
+          <div class="profile-role">ADMINISTRATOR</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <div class="main-content">
+    <header class="topbar">
+      <div class="topbar-left">
+        <div>
+          <div class="page-title">จัดการ Template Word</div>
+          <div class="page-breadcrumb">admin / templates</div>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <button class="logout-btn" onclick="logout()">🚪 ออกจากระบบ</button>
+      </div>
+    </header>
+
+    <main class="page-content" style="padding:0;">
+
+      <!-- Banner -->
+      <div class="info-banner">
+        <span>ℹ️</span>
+        <span>ไฟล์ template ใช้สำหรับสร้างเอกสาร Word อัตโนมัติ — ดาวน์โหลดเพื่อแก้ไข แล้วอัปโหลดกลับเพื่ออัปเดต</span>
+      </div>
+
+      <!-- Template Grid -->
+      <div class="template-grid" id="templateGrid">
+        <div class="template-loading">
+          <span class="spinner"></span>&nbsp; กำลังโหลด...
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<!-- ========== Upload Modal ========== -->
+<div class="modal-overlay" id="uploadModal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">⬆️ อัปโหลด Template</div>
+      <button class="modal-close" onclick="closeModal('uploadModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <p style="font-size:13px;color:var(--text-muted);margin-bottom:16px;">
+        กำลังอัปโหลดแทนที่:&nbsp;
+        <strong style="color:var(--text-primary)" id="uploadTargetName"></strong>
+      </p>
+
+      <!-- Drop Zone -->
+      <div class="upload-drop-zone" id="dropZone"
+           ondragover="onDragOver(event)"
+           ondragleave="onDragLeave()"
+           ondrop="onDrop(event)"
+           onclick="document.getElementById('fileInput').click()">
+        <div class="drop-icon">📂</div>
+        <div class="drop-hint">ลากไฟล์มาวางที่นี่ หรือ คลิกเพื่อเลือก</div>
+        <div class="drop-types">รองรับเฉพาะไฟล์ .docx</div>
+        <input type="file" id="fileInput" accept=".docx" style="display:none;" onchange="onFileSelected(event)" />
+      </div>
+
+      <!-- Selected File -->
+      <div class="selected-file" id="selectedFile" style="display:none;">
+        <span>📝</span>
+        <span class="file-name" id="selectedFileName"></span>
+        <span class="file-size" id="selectedFileSize"></span>
+        <button class="remove-file-btn" onclick="clearFile()">✕</button>
+      </div>
+
+      <!-- Progress -->
+      <div class="upload-progress" id="uploadProgress" style="display:none;">
+        <div class="progress-bar">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <div class="progress-label" id="progressLabel">กำลังอัปโหลด...</div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('uploadModal')">ยกเลิก</button>
+      <button class="btn btn-primary" id="uploadBtn" onclick="doUpload()" disabled>⬆️ อัปโหลด</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast-container" id="toastContainer"></div>
+
+<script src="/js/admin/utils.js"></script>
+<script src="/js/admin/templates.js"></script>
+</body>
+</html>

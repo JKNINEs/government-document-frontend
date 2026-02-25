@@ -1,0 +1,721 @@
+* {
+    box-sizing: border-box;
+    font-family: "Tahoma", sans-serif;
+}
+
+body {
+    margin: 0;
+    background: #f5f5f5;
+    padding-top: 70px; /* เท่าความสูง topbar */
+}
+
+.topbar {
+    position: fixed;          /* ล็อคติดจอ */
+    top: 0;
+    left: 0;
+    width: 100%;
+
+    height: 70px;             /* ความสูง navbar */
+    background: #6a1b9a;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0 30px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+    backdrop-filter: blur(6px);
+    z-index: 1000;
+}
+
+/* กล่องพื้นหลังโลโก้ */
+.logo-box {
+    width: 90px;               /* ทำให้เป็นสี่เหลี่ยม */
+    height: 70px;
+    background: #ffffff;       /* สีพื้นหลัง (ปรับได้) */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: -30px;
+}
+
+/* โลโก้ด้านใน */
+.logo-box img {
+    max-width: 48px;
+    max-height: 48px;
+}
+
+
+.top-menu {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+/* เมนูทั่วไป */
+.top-menu .nav-link {
+    color: #fff;
+    text-decoration: none;
+    padding: 6px 18px;
+    border-radius: 20px;
+    font-size: 16px;
+    transition: all 0.25s ease;
+}
+
+/* hover */
+.top-menu .nav-link:hover {
+    background: rgba(255, 255, 255, 0.18);
+}
+
+/* เมนูหน้าปัจจุบัน */
+.top-menu .nav-link.active {
+    background: #9b59b6;   /* ม่วงอ่อน */
+    color: #fff;
+    font-weight: 500;
+}
+
+.divider {
+    border-left: 2px solid #e0e0e0; /* สีเทาอ่อน */
+    height: 24px;                  /* ความสูงของเส้น */
+    align-self: center;            /* จัดให้อยู่กึ่งกลางแนวตั้ง */
+}
+
+/* ===== Auth Button ===== */
+.login-btn {
+  border: none;
+  padding: 8px 16px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 16px;
+  color: #fff;
+
+  /* สถานะเริ่มต้น: ยังไม่โชว์ */
+  /* opacity: 0;
+  transform: translateY(-4px);
+  pointer-events: none; */
+
+  transition:
+    opacity 0.25s ease,
+    transform 0.25s ease,
+    background-color 0.25s ease;
+}
+
+/* ===== แสดงปุ่มอย่างเนียน ===== */
+.login-btn.ready {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+/* ===== LOGIN ===== */
+.login-btn.login {
+  background: #00983f;
+}
+
+/* ===== LOGOUT ===== */
+.login-btn.logout {
+  background: #e53935;
+}
+
+
+/* ===== Hero ===== */
+.hero {
+    position: relative;
+    height: 200px;
+    overflow: hidden;
+}
+
+.hero-bg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 70% 80%;         /* ปรับละเอียด */
+}
+
+.hero-text {
+    position: absolute;
+    bottom: 5px;
+    left: 60px;
+    color: #ffffff;
+}
+
+.hero-text h1 {
+    font-size: 32px;
+    margin: 0;
+}
+
+.hero-text p {
+    font-size: 18px;
+    margin-top: 6px;
+}
+
+/* ===== Main Content ===== */
+.main-content {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 30px;
+    padding: 40px 50px;
+}
+
+.card {
+    background: #fff;
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+}
+
+.card h3 {
+    margin-top: 0;
+}
+
+.calendar-box {
+    margin-top: 0px;
+}
+
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
+.calendar-header button {
+    border: none;
+    background: #eee;
+    border-radius: 6px;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 6px;
+}
+
+.day-name {
+    text-align: center;
+    font-size: 13px;
+    font-weight: 600;
+    color: #666;
+}
+
+.calendar-day {
+  background: #fff;
+  border: 1px solid #e0e0e0;   /* 🔥 กรอบบาง */
+  border-radius: 10px;
+  padding: 6px;
+  min-height: 90px;
+  font-size: 13px;
+  transition: all 0.2s ease;
+}
+
+
+/* Right column */
+.right-column {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.room-item{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:10px 14px;
+  border-radius:16px;
+  margin-bottom:10px;
+  font-size:14px;
+}
+
+.room-item.free{
+  background:#e8f5e9;
+  color:#2e7d32;
+}
+
+.room-item.busy{
+  background:#ffebee;
+  color:#c62828;
+}
+
+.room-badge{
+  font-weight:600;
+}
+
+/* Document system */
+.doc-system {
+    background: linear-gradient(135deg, #001e8a, #003cff);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 30px;
+}
+
+.doc-system img {
+    width: 60px;
+}
+
+.link-card {
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+/* เอฟเฟกต์เวลาชี้ */
+.link-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 14px 30px rgba(0,0,0,0.25);
+    transition: all 0.25s ease;
+}
+
+.doc-system h2 {
+    color: #fff;
+}
+
+.calendar-header {
+    background: linear-gradient(135deg, #6a1b9a, #8e44ad);
+    color: #fff;
+    padding: 10px 14px;
+    border-radius: 12px;
+}
+
+.calendar-header button {
+    background: rgba(255,255,255,0.25);
+    color: #fff;
+    font-size: 18px;
+}
+
+.calendar-header button:hover {
+    background: rgba(255,255,255,0.4);
+}
+.calendar-day {
+    height: 44px;
+    border-radius: 10px;
+    background: #f6f6f6;
+    text-align: center;
+    line-height: 44px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.calendar-day:hover {
+    background: #ede7f6;
+    color: #6a1b9a;
+    font-weight: 600;
+}
+
+.calendar-day.today {
+    background: #6a1b9a;
+    color: #fff;
+    font-weight: 700;
+    box-shadow: 0 4px 10px rgba(106, 27, 154, 0.4);
+}
+
+.doc-system {
+    background: linear-gradient(135deg, #0d2cff, #0026a8);
+    box-shadow: 0 14px 30px rgba(0,0,0,0.25);
+}
+
+.doc-system:hover {
+    transform: translateY(-6px);
+}
+
+.calendar-box {
+    background: #fff;
+    border-radius: 20px;
+    padding: 20px;
+
+    box-shadow:
+        0 8px 24px rgba(0, 0, 0, 0.12),
+        0 2px 6px rgba(0, 0, 0, 0.08);
+
+    transition: all 0.25s ease;
+}
+
+.calendar-box {
+    border: 1px solid rgba(123, 31, 162, 0.25);
+}
+
+.calendar-box:hover {
+    transform: translateY(-4px);
+    box-shadow:
+        0 14px 34px rgba(0, 0, 0, 0.18),
+        0 6px 12px rgba(0, 0, 0, 0.12);
+}
+
+.calendar-day {
+    background: #fff;
+    border-radius: 8px;
+    padding: 6px;
+    min-height: 90px;
+    font-size: 13px;
+}
+
+.calendar-day.today {
+    outline: 2px solid #4CAF50;
+}
+
+.event {
+    margin-top: 4px;
+    padding: 3px 4px;
+    border-radius: 4px;
+    color: #fff;
+    font-size: 11px;
+}
+
+.time {
+    font-size: 10px;
+}
+
+/* ===== Modal ===== */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 999;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+}
+
+.modal-content {
+  background: #fff;
+  max-width: 420px;
+  margin: 10% auto;
+  padding: 16px;
+  border-radius: 12px;
+}
+
+.close {
+  float: right;
+  font-size: 22px;
+  cursor: pointer;
+}
+
+.modal-event {
+  margin-top: 10px;
+  padding: 8px;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 13px;
+}
+.add-btn{
+  margin: 10px 0;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: none;
+  background: #6a1b9a;
+  color: #fff;
+  cursor: pointer;
+}
+.add-btn:hover{ background:#7b1fa2; }
+
+.booking-form label{
+  display:block;
+  font-size:12px;
+  margin-top:8px;
+}
+.booking-form input, .booking-form select{
+  width:100%;
+  padding:6px;
+  margin-top:4px;
+  border-radius:6px;
+  border:1px solid #ccc;
+}
+.booking-form .actions{
+  display:flex;
+  gap:8px;
+  margin-top:10px;
+}
+
+.modal-actions{
+  display:flex;
+  gap:8px;
+  margin-top:8px;
+}
+.edit-btn, .delete-btn{
+  border:none;
+  border-radius:6px;
+  padding:4px 8px;
+  cursor:pointer;
+  font-size:12px;
+}
+.edit-btn{ background:#ffb300; }
+.delete-btn{ background:#e53935; color:#fff; }
+
+.modal-content {
+  position: relative;
+}
+
+.modal-actions button {
+  position: static !important;
+}
+
+.modal button {
+  position: static !important;
+}
+
+/* ซ่อนปุ่มแก้ไข/ลบไว้ก่อน */
+.modal-actions {
+  display: none;
+}
+
+.modal.show .modal-actions {
+  display: flex;
+}
+
+.main-footer {
+    background-color: #6a1b9a;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    border-top: 1px solid #ddd;
+    padding-top: 30px;
+    font-family: 'Sarabun', 'Tahoma', sans-serif;
+}
+
+.footer-container {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr 1fr; /* แบ่ง 3 ส่วน */
+    gap: 100px;
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 0 20px 30px 20px;
+    align-items: center;
+}
+
+/* โลโก้ */
+.footer-logo {
+    max-width: 100px;
+    margin-bottom: 10px;
+}
+.agency-name {
+    font-size: 1.1rem;
+    color: #ffe100;
+    font-weight: bold;
+}
+
+/* ข้อมูลติดต่อ */
+.footer-info-section p {
+    margin: 5px 0;
+    font-size: 0.95rem;
+    color: #ffffff;
+}
+
+.social-icons {
+    margin-top: 15px;
+    display: flex;
+    gap: 10px;
+}
+.social-icons img {
+    width: 35px;
+    transition: 0.3s;
+}
+.social-icons img:hover { transform: scale(1.1); }
+
+/* แผนที่ */
+.footer-map-section {
+    min-height: 150px;
+    background: #f0f0f0;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+
+.copyright-content {
+    text-align: left; /* จัดข้อความให้อยู่กึ่งกลางหน้ากระดาษ */
+    width: 100%;
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 0.8rem;
+    margin-top: 25px;
+}
+
+.copyright-content p {
+    margin: 0;
+}
+
+/* ตกแต่งตัวคั่นสัญลักษณ์ | */
+.sep {
+    margin-right: 10px;
+    color: rgba(255, 255, 255, 0.4);
+}
+
+/* Responsive สำหรับมือถือ */
+@media (max-width: 768px) {
+    .footer-container {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+    .social-icons { justify-content: center; }
+    .footer-bottom {
+        flex-direction: column;
+        gap: 10px;
+    }
+}
+
+
+
+@media (max-width: 768px) {
+    /* 1. ปรับ Topbar */
+    .topbar {
+        padding: 0 15px;
+        height: 60px;
+        justify-content: space-between;
+    }
+
+    .logo-box {
+        width: 60px;
+        height: 60px;
+        margin-left: -15px;
+    }
+
+    /* 3. Re-design เมนูใหม่ (Full Screen Overlay) */
+    .top-menu {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100vh;
+        background: #691b9a;
+        flex-direction: column !important;
+        justify-content: center !important;
+        align-items: center !important;
+        gap: 25px !important;
+        padding: 0;
+        margin: 0;
+        z-index: 1500;
+        /* ซ่อนไว้ก่อน */
+        opacity: 0;
+        visibility: hidden;
+        transition: 0.4s ease;
+    }
+
+    /* เมื่อกดเปิดเมนู */
+    .top-menu.active {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .top-menu .nav-link {
+        font-size: 20px;
+        width: 80%;
+        text-align: center;
+        padding: 15px;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .divider { display: none; } /* ซ่อนเส้นแบ่ง */
+
+    /* 4. ปรับ Main Content เป็นแนวตั้ง */
+    .main-content {
+        display: flex !important;
+        flex-direction: column !important;
+        padding: 20px 15px !important;
+        gap: 20px !important;
+        padding: 15px 10px !important;
+    }
+
+    /* 5. ปรับ Hero ให้ข้อความอยู่กลาง */
+    .hero { height: 100px; }
+    .hero-text {
+        left: 0 !important;
+        width: 100%;
+        text-align: center;
+    }
+    .hero-text h1 { font-size: 22px; }
+
+    /* 6. จัดการปฏิทินให้เล็กลง */
+    .calendar-day {
+        min-height: 45px !important;
+        font-size: 11px !important;
+    }
+
+        /* ปรับหัวข้อสถานะห้องให้อยู่กลางและอ่านง่ายขึ้น */
+    .card.room-status h3 {
+        font-size: 18px;
+        text-align: center;
+        margin-bottom: 15px;
+    }
+
+    .room-badge.busy {
+        font-size: 12px;
+        text-align: center;
+        display: block;
+    }
+
+
+    .card.doc-system.link-card {display: none;}
+
+    /* ===== FOOTER RESPONSIVE FIX ===== */
+
+    .main-footer {
+        padding-top: 20px;
+        padding-bottom: 20px;
+    }
+
+    .footer-container {
+        /* ปรับจาก 3 คอลัมน์ เป็น 1 คอลัมน์ */
+        grid-template-columns: 1fr !important; 
+        gap: 30px !important;
+        text-align: center; /* จัดตัวอักษรให้อยู่กึ่งกลางทั้งหมด */
+    }
+
+    .footer-logo-section {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .footer-logo {
+        max-width: 80px; /* ลดขนาดโลโก้ในมือถือเล็กน้อย */
+        margin-bottom: 15px;
+    }
+
+    .agency-name {
+        font-size: 1.1rem;
+        line-height: 1.4;
+    }
+
+    .footer-info-section {
+        display: flex;
+        flex-direction: column;
+        align-items: center; /* จัดไอคอนโซเชียลให้อยู่กลาง */
+    }
+
+    .social-icons {
+        justify-content: center;
+        margin: 15px 0;
+    }
+
+    .footer-copyright-bar {
+        margin-top: 10px;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        padding-top: 15px;
+        width: 100%;
+    }
+
+    .copyright-content {
+        text-align: center;
+        font-size: 0.75rem;
+    }
+
+    .sep {
+        display: none; /* ซ่อนเส้นแบ่งในมือถือเพื่อไม่ให้ดูเกะกะ */
+    }
+
+    .footer-map-section {
+        width: 100%;
+        height: 200px;
+        border-radius: 12px;
+        overflow: hidden;
+    }
+
+    #map iframe {
+        height: 200px !important;
+    }
+}

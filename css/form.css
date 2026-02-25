@@ -1,0 +1,155 @@
+/* Form Container */
+.form-container {
+    background: white;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #333;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    font-family: 'Sarabun', sans-serif;
+}
+
+.form-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+
+/* Buttons */
+.btn-primary,
+.btn-secondary,
+.btn-success,
+.btn-danger {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.btn-primary {
+    background: #2196F3;
+    color: white;
+}
+
+.btn-secondary {
+    background: #f1f1f1;
+    color: #333;
+}
+
+.btn-success {
+    background: #4CAF50;
+    color: white;
+}
+
+.btn-danger {
+    background: #f44336;
+    color: white;
+}
+
+.btn-primary:hover {
+    background: #1976D2;
+}
+
+.btn-success:hover {
+    background: #45a049;
+}
+
+.btn-danger:hover {
+    background: #da190b;
+}
+
+/* Checkbox สำหรับผ่าน/ไม่ผ่าน */
+.result-checkbox {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+
+/* Table Styles */
+.table-scroll-area {
+    max-height: 500px;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.staff-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.staff-table thead th {
+    background: #6a1b9a;
+    padding: 12px;
+    text-align: left;
+    font-weight: 600;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.staff-table tbody td {
+    padding: 12px;
+    border-bottom: 1px solid #eee;
+}
+
+.staff-table tbody tr:hover {
+    background: #f9f9f9;
+}
+
+/* Gender Select */
+.gender-select {
+    padding: 6px 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+/* สไตล์พื้นฐานสำหรับปุ่ม Tab */
+.tab-btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+    
+    /* สีฟ้าพื้นหลัง และ ตัวอักษรสีขาว */
+    background-color: #007bff; 
+    color: white;
+    margin-right: 5px;
+}
+
+/* เอฟเฟกต์เมื่อเอาเมาส์ไปวาง (Hover) */
+.tab-btn:hover {
+    background-color: #0056b3; /* สีฟ้าเข้มขึ้นเมื่อ Hover */
+}
+
+/* สไตล์สำหรับปุ่มที่กำลังถูกเลือก (Active) */
+.tab-btn.active {
+    background-color: #004085; /* สีน้ำเงินเข้มเพื่อให้รู้ว่าอยู่หน้าไหน */
+    box-shadow: inset 0 3px 5px rgba(0,0,0,0.2);
+}

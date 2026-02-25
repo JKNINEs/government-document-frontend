@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/index.css">
+    <link rel="stylesheet" href="../css/form.css">
+    <title>จัดการข้อมูล</title>
+</head>
+<body>
+    <header class="topbar">
+        <a href="../index.html" class="logo-box">
+            <img src="../img/logo.png" alt="logo">
+        </a>
+    </header>
+    <div style="max-width: 1200px; margin: 0 auto; padding: 20px;">
+        <h1 class="page-title">จัดการข้อมูลโครงการ</h1>
+        
+        
+        <!-- Tabs -->
+        <div style="margin-bottom: 20px;">
+            <button onclick="showTab('plans')" id="tabPlans" class="tab-btn">จัดการแผนงาน</button>
+            <button onclick="showTab('projects')" id="tabProjects" class="tab-btn">จัดการโครงการ</button>
+            <button onclick="showTab('activities')" id="tabActivities" class="tab-btn">จัดการกิจกรรม</button>
+        </div>
+        
+        <!-- Tab 1: Master Plans -->
+        <div id="plansTab" style="display: none;">
+            <h2 class="page-title" >จัดการแผนงาน</h2>
+            <button onclick="openPlanModal('create')" class="tab-btn"> + เพิ่มแผนงานใหม่</button>
+            <div id="plansTableArea"></div>
+        </div>
+        
+        <!-- Tab 2: Master Projects -->
+        <div id="projectsTab" style="display: none;">
+            <h2 class="page-title">จัดการโครงการ</h2>
+            <button onclick="openProjectModal('create')" class="tab-btn">+ เพิ่มโครงการใหม่</button>
+            <div id="projectsTableArea"></div>
+        </div>
+        
+        <!-- Tab 3: Project Activities -->
+        <div id="activitiesTab" style="display: none;">
+            <h2 class="page-title">จัดการกิจกรรม</h2>
+            <button onclick="openActivityModal('create')" class="tab-btn"> + เพิ่มกิจกรรมใหม่</button>
+            <div id="activitiesTableArea"></div>
+        </div>
+    </div>
+    
+    <!-- Modal for Plans -->
+    <div id="planModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5);">
+        <div style="background: white; margin: 50px auto; padding: 20px; width: 500px; border-radius: 10px;">
+            <h3 id="planModalTitle">เพิ่มแผนงาน</h3>
+            <form id="planForm">
+                <div style="margin-bottom: 15px;">
+                    <label>ชื่อแผนงาน *</label>
+                    <input type="text" id="planName" required style="width: 100%; padding: 8px;">
+                </div>
+                <div>
+                    <button type="submit">💾 บันทึก</button>
+                    <button type="button" onclick="closePlanModal()">❌ ยกเลิก</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Modal for Projects -->
+    <div id="projectModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5);">
+        <div style="background: white; margin: 50px auto; padding: 20px; width: 500px; border-radius: 10px;">
+            <h3 id="projectModalTitle">เพิ่มโครงการ</h3>
+            <form id="projectForm">
+                <div style="margin-bottom: 15px;">
+                    <label>ชื่อโครงการ *</label>
+                    <input type="text" id="projectName" required style="width: 100%; padding: 8px;">
+                </div>
+                <div>
+                    <button type="submit">💾 บันทึก</button>
+                    <button type="button" onclick="closeProjectModal()">❌ ยกเลิก</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Modal for Activities -->
+    <div id="activityModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); overflow-y: auto;">
+        <div style="background: white; margin: 50px auto; padding: 20px; width: 800px; border-radius: 10px;">
+            <h3 id="activityModalTitle">เพิ่มกิจกรรม</h3>
+            <form id="activityForm">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                    <div>
+                        <label>ชื่อกิจกรรม *</label>
+                        <input type="text" id="activityName" required style="width: 100%; padding: 8px;">
+                    </div>
+                    <div>
+                        <label>ปีงบประมาณ *</label>
+                        <input type="text" id="fiscalYear" required style="width: 100%; padding: 8px;">
+                    </div>
+                    <div>
+                        <label>ประเภทงบประมาณ</label>
+                        <input type="text" id="kindOfFiscal" style="width: 100%; padding: 8px;">
+                    </div>
+                    <div>
+                        <label>กิจกรรม</label>
+                        <input type="text" id="activity" style="width: 100%; padding: 8px;">
+                    </div>
+                    <div>
+                        <label>ค่าใช้จ่าย</label>
+                        <input type="text" id="expenses" step="0.01" style="width: 100%; padding: 8px;">
+                    </div>
+                    <div>
+                        <label>กิจกรรมย่อย</label>
+                        <input type="text" id="subActivityName" style="width: 100%; padding: 8px;">
+                    </div>
+                    <div>
+                        <label>แผนงาน *</label>
+                        <select id="planId" required style="width: 100%; padding: 8px;">
+                            <option value="">-- เลือกแผนงาน --</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label>โครงการ *</label>
+                        <select id="projectId" required style="width: 100%; padding: 8px;">
+                            <option value="">-- เลือกโครงการ --</option>
+                        </select>
+                    </div>
+                    <div style="grid-column: 1 / -1;">
+                        <label>เป้าหมาย</label>
+                        <input id="targetGoal" rows="3" style="width: 80px; padding: 8px;"></input>
+                    </div>
+                </div>
+                <div style="margin-top: 20px;">
+                    <button type="submit">💾 บันทึก</button>
+                    <button type="button" onclick="closeActivityModal()">❌ ยกเลิก</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="../js/project_form.js"></script>
+</body>
+</html>

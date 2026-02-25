@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>คู่มือการใช้งานระบบ - กรมพัฒนาฝีมือแรงงาน 3</title>
+    <link rel="stylesheet" href="./css/guide.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"></head>
+<body>
+    <header class="topbar">
+        <a href="home.html" class="logo-box">
+            <img src="./img/logo.png" alt="logo">
+        </a>
+
+        <nav class="top-menu">
+            <a href="home.html" class="nav-link">หน้าแรก</a>
+            <a href="index.html" class="nav-link">ระบบจัดทำเอกสาร</a>
+            <span class="divider"></span>
+            <a href="home.html#contact-footer" class="nav-link">ติดต่อเรา</a>
+            <a href="user-guide.html" class="nav-link active">คู่มือการใช้งาน</a>
+            <button class="login-btn" id="authBtn">เข้าสู่ระบบ</button>
+        </nav>
+    </header>
+
+    <div class="manual-layout">
+        <aside class="manual-sidebar">
+            <div class="sidebar-header">คู่มือการใช้งาน</div>
+            <nav class="manual-nav">
+                <div class="nav-group">
+                    <span class="group-title">เริ่มต้นใช้งาน</span>
+                    <a href="#login" class="nav-item">การเข้าสู่ระบบ</a>
+                    <a href="#dashboard" class="nav-item">สิทธิ์ในการเข้าถึง</a>
+                </div>
+                <div class="nav-group">
+                    <span class="group-title">การจัดการข้อมูล</span>
+                    <a href="#approval" class="nav-item">การสร้างเอกสารรวม</a>
+                    <a href="#loan" class="nav-item">การสร้างเอกสารแยก</a>
+                </div>
+                <div class="nav-group">
+                    <span class="group-title">การจองห้องอบรม</span>
+                    <a href="#project" class="nav-item">จองห้อง</a>
+                    <a href="#course" class="nav-item">แก้ไข/ลบ</a>
+                    <a href="#applicant" class="nav-item">ตรวจสอบสถานะ</a>
+                </div>
+            </nav>
+        </aside>
+
+        <main class="manual-content">
+            <section id="login" class="doc-section active">
+                <h1><i class="fas fa-sign-in-alt"></i> การเข้าสู่ระบบ</h1>
+                <p>วิธีการเข้าใช้งานระบบจัดทำเอกสาร...</p>
+                <div class="step-card">
+                    <h3>ขั้นตอนการ : Log-in</h3>
+                    <p>กรอก Username และ Password ที่ได้รับจากส่วนกลาง > <span class="badge-purple"><i class="fa-solid fa-right-to-bracket"></i> เข้าสู่ระบบ</span></p>
+                </div>
+            </section>
+
+            <section id="dashboard" class="doc-section">
+                <h1><i class="fas fa-user-shield"></i> สิทธิ์ในการเข้าถึง</h1>
+                <p>ตรวจสอบสิทธิ์การใช้งานตามระดับตำแหน่งของท่าน...</p>
+            </section>
+
+            <section id="approval" class="doc-section">
+                <h1><i class="fas fa-file-medical"></i> การสร้างเอกสารรวม</h1>
+                <p>การสร้างเอกสารในรูปแบบไฟล์รวม...</p>
+                <div class="step-card">
+                    <h3>ขั้นตอนที่ 1: ค้นหารุ่นการฝึก</h3>
+                    <p>ไปที่เมนู <strong>"สร้างเอกสารรวม"</strong> > <strong>"เลือกรุ่นที่ต้องการ"</strong></p>
+                </div>
+                <div class="step-card">
+                    <h3>ขั้นตอนที่ 2: ตรวจสอบข้อมูลที่ Auto fill มา</h3>
+                    <p>ตรวจสอบข้อมูลทุกหน้าว่าถูกต้องไหม  <span class="badge-purple"><i class="fa-solid fa-floppy-disk"></i> กดปุ่มบันทึกข้อมูลหน้าสุดท้าย</span> ที่ด้านล่าง</p>
+                </div>
+                <div class="step-card">
+                    <h3>ขั้นตอนที่ 3: ดาวน์โหลดเอกสาร</h3>
+                    <p>"กำลังดาวน์โหลดไฟล์ Zip" > <strong>"เสร็จสิ้น"</strong> > ได้จะได้ไฟล์ชื่อ <strong>"Dos_(เลขรุ่น).zip"</strong></p>
+                </div>
+                <div class="step-card">
+                    <h3>ขั้นตอนที่ 4: แตกไฟล์ Zip</h3>
+                    <p>"คลิกขวาที่ไฟล์" > <strong>"เลือกแตกไฟล์"</strong> > "เลือกตำแหน่งของโฟลเดอร์" > จะได้โฟลเดอร์ <strong>"Dos_(เลขรุ่น)"</strong> > "กดเข้าโฟลเดอร์แล้วเช็คว่ามีครบทั้ง 7 ไฟล์"</p>
+                </div>
+            </section>
+
+            <section id="loan" class="doc-section">
+                <h1><i class="fas fa-file-medical"></i> ขั้นตอนการอนุมัติฝึก (สร้างเอกสารแยก)</h1>
+                <p>การสร้างเอกสารในรูปแบบไฟล์แยก...</p>
+                <div class="step-card">
+                    <h3>ขั้นตอนที่ 1: ค้นหารุ่นการฝึก</h3>
+                    <p>ไปที่เมนู <strong>"สร้างเอกสารแยก"</strong> > <strong>"ใส่รุ่นที่ต้องการ"</strong> (หรือเอกสารอื่นๆที่ต้องการ) >  <span class="badge-purple"><i class="fa-solid fa-floppy-disk"></i> บันทึก</span></p>
+                </div>
+                <div class="step-card">
+                    <h3>ขั้นตอนที่ 2: ดาวน์โหลดเอกสาร</h3>
+                    <p>"กำลังดาวน์โหลดไฟล์" > <strong>"เสร็จสิ้น"</strong> > ได้จะได้ไฟล์ชื่อ <strong>"อนุมัติฝึก_(เลขรุ่น).docx"</strong></p>
+                </div>
+            </section>
+
+            <section id="project" class="doc-section">
+                <h1><i class="fas fa-door-open"></i> การจองห้องอบรม</h1>
+                <p>ตรวจสอบตารางว่างและทำการจองห้องผ่านระบบ...</p>
+                <div class="step-card">
+                    <h3>ขั้นตอนที่ 1: เลือกวันที่ต้องการ</h3>
+                    <p>ไปที่ปฏิทิน <strong>"คลิกวันที่ต้องการจอง"</strong> > <strong>"จองห้อง"</strong> > "หน้าต่างกรอกข้อมูล"</p>
+                </div>
+                <div class="step-card">
+                    <h3>ขั้นตอนที่ 2: กรอกข้อมูล</h3>
+                    <p>กรอกข้อมูลให้ครบถ้วน >  <span class="badge-purple"><i class="fa-solid fa-floppy-disk"></i> กดปุ่มบันทึก</span></p>
+                </div>
+                <div class="step-card">
+                    <h3>ขั้นตอนที่ 3: แสดงผล</h3>
+                    <p>จะขึ้นโน้ตตรงวันที่จองในปฏิทิน และ จะแสดงในช่องสถานะ</p>
+                </div>
+            </section>
+
+            <section id="course" class="doc-section">
+                <h1><i class="fas fa-edit"></i> แก้ไข/ลบรายการจอง</h1>
+                <p>จัดการรายการที่เคยลงทะเบียนไว้...</p>
+                <div class="step-card">
+                    <h3>ขั้นตอนการ: แก้ไข</h3>
+                    <p>ไปที่ปฏิทิน <strong>"คลิกวันที่ต้องการจองแก้ไข"</strong> > <strong>"แก้ไข"</strong> > "หน้าต่างกรอกข้อมูล" > "แก้ไขข้อมูลที่ต้องการ" >  <span class="badge-purple"><i class="fa-solid fa-floppy-disk"></i> กดปุ่มบันทึก</span></p>
+                </div>
+                <div class="step-card">
+                    <h3>ขั้นตอนการ: ลบ</h3>
+                    <p>ไปที่ปฏิทิน <strong>"คลิกวันที่ต้องการลบข้อมูล"</strong> >  <span class="badge-purple"><i class="fa-solid fa-trash"></i> ลบ</span></p>
+                </div>
+            </section>
+
+            <section id="applicant" class="doc-section">
+                <h1><i class="fas fa-search"></i> ตรวจสอบสถานะ</h1>
+                <p>ติดตามสถานะเอกสารและการอนุมัติห้องอบรม...</p>
+            </section>
+        </main>
+    </div>
+    
+<script src="./js/inout.js"></script>
+<script src="./js/manual-switcher.js"></script>
+</body>
+</html>

@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <title>ระบบจัดทำเอกสาร | สพร.3 ชลบุรี</title>
+    <link rel="stylesheet" href="./css/index.css?v=1.4">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+
+<!-- ===== Topbar ===== -->
+<header class="topbar">
+    <a href="home.html" class="logo-box">
+        <img src="./img/logo.png" alt="logo">
+    </a>
+
+    <nav class="top-menu">
+        <a href="home.html" class="nav-link">หน้าแรก</a>
+        <a href="index.html" class="nav-link active">ระบบจัดทำเอกสาร</a>
+        <span class="divider"></span>
+        <a href="home.html#contact-footer" class="nav-link">ติดต่อเรา</a>
+        <a href="user-guide.html" class="nav-link">คู่มือการใช้งาน</a>
+        <button class="login-btn" id="authBtn">เข้าสู่ระบบ</button>
+    </nav>
+</header>
+
+<!-- ===== Main Layout ===== -->
+<div class="container">
+
+<aside class="sidebar">
+    <div class="sidebar-content">
+        <div class="sidebar-header">เมนู</div>
+
+        <div class="menu-group">
+            <div class="menu-group-title" onclick="toggleSubMenu(this)">
+                <span>สร้างเอกสารรวม</span>
+                <i class="fas fa-chevron-down arrow-icon"></i>
+            </div>                
+            <div class="sub-menu">
+                <span data-menu="org"></i>สร้างทุกเอกสาร</span>
+            </div>
+        </div>
+
+        <div class="menu-group">
+            <div class="menu-group-title" onclick="toggleSubMenu(this)">
+                <span>สร้างเอกสารแยก</span>
+                <i class="fas fa-chevron-down arrow-icon"></i>
+            </div>
+            <div class="sub-menu">
+                <span data-menu="training-approval-info"></i>อนุมัติฝึก</span>
+                <span data-menu="eligible-candidates-announcement"></i>ประกาศผู้มีสิทธิ์</span>
+                <span data-menu="material-requisition-form"></i>ใบขอซื้อวัสดุ</span>
+                <span data-menu="loan-request"></i>หักล้างยืมเงิน</span>
+                <span data-menu="completion-announcement"></i>ประกาศจบ</span>
+                <span data-menu="speaker-fee-claim"></i>เบิกวิทยากร</span>
+                <span data-menu="food-fee-claim"></i>เบิกอาหาร</span>
+                <span data-menu="foodsnack-fee-claim"></i>เบิกค่าอาหารว่าง</span>
+               
+            </div>
+        </div>
+
+        <div class="menu-group">
+            <div class="menu-group-title" onclick="toggleSubMenu(this)">
+                <span>เพิ่ม/แก้ไข</span>
+                <i class="fas fa-chevron-down arrow-icon"></i>
+            </div>                
+            <div class="sub-menu">
+                <span data-menu="project"></i>โครงการกิจกรรม</span>
+                <span data-menu="course"></i>หลักสูตร</span>
+                <span data-menu="place"></i>สถานที่ฝึก</span>
+                <span data-menu="trainer"></i>วิทยากร</span>
+                <span data-menu="staff"></i>เจ้าหน้าที่</span>
+                <span data-menu="applicant"></i>ข้อมูลผู้สมัคร</span>
+                <span data-menu="load_date"></i>รายการยืมเงิน</span>
+            </div>
+        </div>
+    </div>
+</aside>
+
+    <!-- Content -->
+    <main class="content">
+        <!-- Page Header -->
+        <div class="page-header">
+            <div data-menu="org" class="page-title">
+                <img src="./img/word.png" alt="" class="title-icon">
+                <h2>ระบบจัดทำเอกสาร</h2>
+            </div>
+
+    
+            
+        </div>
+
+<div class="form-box">
+        <!-- 🔥 เพิ่ม Dynamic Table Area ตรงนี้ -->
+        <div id="dynamicTableArea" style="display: none;"></div>
+
+        <!-- Step Header -->
+        <div class="step-header">
+            <button type="button" class="step-tab active" data-step="0">ข้อมูลโครงการ</button>
+            <button type="button" class="step-tab" data-step="1">วิทยากร / เจ้าหน้าที่</button>
+            <button type="button" class="step-tab" data-step="2">รายละเอียดค่าใช้จ่าย</button>
+            <button type="button" class="step-tab" data-step="3">รายชื่อผู้มีสิทธิอบรม</button>
+            <button type="button" class="step-tab" data-step="4">รายชื่อผู้ผ่านการอบรม</button>
+            <div class="header-actions">
+                <a href="./pages/create.html" class="btn btn-new" id="mainCreateBtn">
+                    + สร้างใหม่ / แก้ไข
+                </a>  
+            </div>       
+        </div>
+
+        <!-- ===== STEP 1 ===== -->
+        <div class="form-step active" id="step-1">
+            <div class="form-row">
+                <label>รุ่นที่</label>
+                <div class="select-wrapper">
+                    <input type="text" id="batchInput" list="batchOptions" placeholder="พิมพ์เพื่อค้นหา..." autocomplete="off">
+                    <datalist class="select-dropdown" id="batchOptions"></datalist>
+                    <div id="status"></div>
+                </div>
+            </div>
+            
+            <!-- ชื่อกิจกรรม -->
+            <div class="form-row">
+                <label>รหัสรุ่นในระบบกรม</label>
+                <input id="systemCodeInput">
+
+                <label>เลขหนังสือขอเปิดฝึก</label>
+                <input id="requestDocNoInput">
+
+                <label>วันที่อบรม</label>
+                <input id="trainingDateInput" >
+
+                <label>กลุ่มเป้าหมาย</label>
+                <input id="targetGroupInput">
+
+                <label>วันที่ขอเปิด</label>
+                <input id="requestDateInput">
+
+                <label>เวลา</label>
+                <input id="trainingTimeInput">
+            </div>
+
+            <div class="form-row">
+                <label>ชื่อกิจกรรม (ย่อ)</label>
+                <div class="select-wrapper">
+                    <input type="text" id="activityNameInput" placeholder="พิมพ์เพื่อค้นหา...">
+                    <div class="select-dropdown" id="activityNameDropdown"></div>
+                </div>
+            </div>
+
+            <!-- ประเภทงบ / แผนงาน / โครงการ / กิจกรรมย่อย / ค่าใช้จ่าย -->
+            <div class="form-row">
+                <label>ประเภทงบประมาณ</label>
+                <input id="kindOfFiscalInput">
+
+                <label>แผนงาน</label>
+                <input id="planNameInput">
+
+                <label>โครงการ</label>
+                <input id="projectNameInput">
+
+                <label>กิจกรรม</label>
+                <input id="ActivityInput">
+
+                <label>กิจกรรมย่อย</label>
+                <input id="subActivityInput">
+
+                <label>ชื่อค่าใช้จ่าย</label>
+                <input id="expensesInput">
+
+                <label>ปีงบประมาณ</label>
+                <input id="fiscalYearInput">
+            </div>
+
+            <!-- ตาราง courses -->
+            <div class="form-row">
+                <label>ชื่อหลักสูตร</label>
+                <div class="select-wrapper">
+                    <input type="text" id="courseNameInput" placeholder="พิมพ์เพื่อค้นหา...">
+                    <div class="select-dropdown" id="courseNameDropdown"></div>
+                </div>
+
+                <label>รหัสหลักสูตร</label>
+                <div class="select-wrapper">
+                    <input type="text" id="courseCodeInput" placeholder="พิมพ์เพื่อค้นหา..." autocomplete="off">
+                    <div class="select-dropdown" id="courseCodeDropdown"></div>
+                </div>
+            
+                <label>ประเภทการฝึก</label>
+                <input type="text" id="courseTypeInput">
+
+                <label>ระยะเวลาฝึก</label>
+                <input type="text" id="courseHoursInput">
+            </div>
+
+            <!-- Course Modal -->
+            <div id="courseModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:1000; justify-content:center; align-items:center;">
+                <div style="background:white; padding:20px; border-radius:8px; width:400px;">
+                    <h3 id="modalTitle">เพิ่มหลักสูตรใหม่</h3>
+                    <hr>
+                    <form id="courseForm">
+                        <input type="hidden" id="edit_course_id">
+                    
+                        <label>รหัสหลักสูตร:</label><br>
+                        <input type="text" id="m_code" style="width:100%; margin-bottom:10px;"><br>
+                        
+                        <label>ชื่อหลักสูตร:</label><br>
+                        <input type="text" id="m_name" style="width:100%; margin-bottom:10px;"><br>
+                        
+                        <label>ชั่วโมงฝึก:</label><br>
+                        <input type="number" id="m_hours" style="width:100%; margin-bottom:10px;"><br>
+
+                        <label>ประเภทกลุ่มย่อย:</label><br>
+                        <input type="text" id="m_sub_type" style="width:100%; margin-bottom:10px;"><br>
+
+                        <div style="text-align:right; margin-top:15px;">
+                            <button type="button" onclick="closeCourseModal()">ยกเลิก</button>
+                            <button type="submit" style="background:green; color:white;">บันทึก</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- ตาราง locations-->
+            <div class="form-row">
+                <label>สถานที่ฝึก</label>
+                <div class="select-wrapper">
+                    <input type="text" id="locationNameInput" placeholder="พิมพ์เพื่อค้นหา..." autocomplete="off">
+                    <div class="select-dropdown" id="locationDropdown"></div>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="button" class="nextBtn">ถัดไป</button>
+            </div>
+        </div>
+
+        <!-- ===== STEP 2 ===== -->
+        <div class="form-step" id="step-2">
+            <div class="form-row">
+                <label>วิทยากร 1</label>
+                <div class="select-wrapper">
+                    <input type="text" id="instructorsInput" placeholder="พิมพ์เพื่อค้นหา..." autocomplete="off">
+                    <div class="select-dropdown" id="instructorsDropdown"></div>
+                </div>
+
+                <label>เลขบัตรวิทยากร</label>
+                <input id="idCardInput">
+            </div>
+
+            <div class="form-row">
+                <label>ผู้ควบคุม</label>
+                <div class="select-wrapper1">
+                    <input id="controller" type="text" class="staffInput" placeholder="พิมพ์เพื่อค้นหา..." autocomplete="off">
+                    <div class="select-dropdown staffDropdown"></div>
+                </div>
+
+                <label>ตำแหน่งผู้ควบคุม</label>
+                <input id="controller_position" type="text" class="positionInput">
+            </div>
+
+            <div class="form-row">
+                <label>ผู้ประสาน 1</label>
+                <div class="select-wrapper1">
+                    <input id="coordinator1" type="text" class="staffInput" placeholder="พิมพ์เพื่อค้นหา..." autocomplete="off">
+                    <div class="select-dropdown staffDropdown"></div>
+                </div>
+
+                <label>ตำแหน่งผู้ประสาน 1</label>
+                <input id="coordinator_position1" type="text" class="positionInput">
+            </div>
+
+            <div class="form-row">
+                <label>ผู้ประสาน 2</label>
+                <div class="select-wrapper1">
+                    <input id="coordinator2" type="text" class="staffInput" placeholder="พิมพ์เพื่อค้นหา..." autocomplete="off">
+                    <div class="select-dropdown staffDropdown"></div>
+                </div>
+
+                <label>ตำแหน่งผู้ประสาน 2</label>
+                <input id="coordinator_position2" type="text" class="positionInput">
+            </div>
+
+            <div class="form-row">
+                <label>ผู้ประสาน 3</label>
+                <div class="select-wrapper1">
+                    <input id="coordinator3" type="text" class="staffInput" placeholder="พิมพ์เพื่อค้นหา..." autocomplete="off">
+                    <div class="select-dropdown staffDropdown"></div>
+                </div>
+
+                <label>ตำแหน่งผู้ประสาน 3</label>
+                <input id="coordinator_position3" type="text" class="positionInput">
+            </div>
+            
+            <div class="form-actions">
+                <button type="button" class="backBtn">ย้อนกลับ</button>
+                <button type="button" class="nextBtn">ถัดไป</button>
+            </div>
+        </div>
+
+        <!-- step3 -->
+        <div class="form-step" id="step-3">
+            <div class="form-row">
+                <label>เลขสัญญายืมเงิน</label>
+                <div class="select-wrapper">
+                    <input id="loanNameInput" type="text" autocomplete="off">
+                    <div class="select-dropdown" id="loanDropdown"></div>
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <label>ระยะเวลา</label>
+                <input id="courseHoursInput1">
+                
+                <label>จำนวนคนสมัคร</label>
+                <input id="applicant_count" type="text">
+                
+                <label>จำนวนวันฝึก</label>
+                <input id="durationDaysInput">
+                
+                <label>จำนวนคนมาจริงวันที่ 1</label>
+                <input id="head_day1" type="text">
+
+                <label>ค่าวิทยากร</label>
+                <input id="costSpeakerNameInput">
+
+                <label>จำนวนคนมาจริงวันที่ 2</label>
+                <input id="head_day2" type="text">
+
+                <label>ค่าอาหารว่าง/คน</label>
+                <input id="costFoodNameInput">
+
+                <label>ค่าวัสดุ/คน</label>
+                <input id="costMaterialNameInput">
+
+                <label>จำนวนมืออาหารว่าง</label>
+                <input id="snack_mue" type="text">
+
+                <label>ค่าอาหาร/คน</label>
+                <input id="food_budget" type="text">
+
+                <label>รวมค่าวิทยากร</label>
+                <input id="total_inst" type="text">
+                
+                <label>รวมค่าอาหาร</label>
+                <input id="total_food" type="text">
+
+                <label>รวมค่าวัสดุ</label>
+                <input id="total_all_material" type="text">
+                
+                <label>รวมค่าอาหารว่าง</label>
+                <input id="total_food_snack" type="text">
+
+                <label>รวมค่าใช้จ่ายทั้งหมด</label>
+                <input id="total_all_budget" type="text">
+            </div>
+
+            <div class="form-actions">
+                <button type="button" class="backBtn">ย้อนกลับ</button>
+                <button type="button" class="nextBtn">ถัดไป</button>
+            </div>
+        </div>
+
+        <!-- รายชื่อผู้มีสิทธิ์เข้าร่วมอบรม -->
+        <div class="form-step" id="step-4">      
+            <div class="list-name">
+                <div class="list-header">
+                    <div class="list-title">
+                        <label>รายชื่อผู้มีสิทธิอบรม</label>
+                    </div>
+                </div>
+                <div id="applicantNamesBox" class="applicant-names">
+                    <!-- รายชื่อ -->
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="button" class="backBtn">ย้อนกลับ</button>
+                <button type="button" class="confirmBtn">ยืนยัน</button>
+            </div>
+        </div>
+
+        <!-- รายชื่อผ่านการอบรม -->
+        <div class="form-step" id="step-5">     
+            <div class="list-name">
+                <div class="list-header">
+                    <div class="list-title">
+                        <label>รายชื่อผู้ผ่านการอบรม</label>
+                    </div>
+                </div>
+
+                <div id="nameInput" class="applicant-names"></div>  
+            </div>
+
+            <div class="form-actions">
+                <button type="button" class="backBtn">ย้อนกลับ</button>
+                <button type="button" class="confirmBtn">ยืนยัน</button>
+            </div>
+        </div>
+    </main>
+</div>
+</div>
+
+<!-- สร้างเอกสารแยก -->
+<!-- เอกสารอนุมัติฝึก -->
+<template id="approvalTemplate">
+    <div class="staff-table-container">
+        <div class="header-title-group"><h3>เอกสารอนุมัติฝึก</h3></div>
+        <div class="form-row">
+            <label>รุ่นที่</label>
+            <div class="select-wrapper">
+                <input type="text" id="batchInput" list="batchOptions" placeholder="พิมพ์เพื่อค้นหา..." autocomplete="off">
+                <datalist id="batchOptions"></datalist>
+                <div id="status"></div>
+            </div>
+        </div>
+        <div class="form-actions">
+            <button type="button" id="saveBtn" class="confirmBtn">
+                <i class="fas fa-file-word"></i> สร้างเอกสาร
+            </button>
+        </div>
+    </div>
+</template>
+
+<!-- ประกาศผู้มีสิทธิ์ -->
+<template id="candidatesTemplate">
+    <div class="staff-table-container">
+        <div class="header-title-group"><h3>เอกสารประกาศผู้มีสิทธิ์ฝึก</h3></div>
+        <div class="form-row">
+            <label>รุ่นที่</label>
+            <div class="select-wrapper">
+                <input type="text" id="batchInput" list="batchOptions" placeholder="พิมพ์เพื่อค้นหา..." autocomplete="off">
+                <datalist id="batchOptions"></datalist>
+                <div id="status"></div>
+            </div>
+        </div>
+        <div class="form-actions">
+            <button type="button" id="apcBtn" class="confirmBtn">
+                <i class="fas fa-file-word"></i> สร้างเอกสาร
+            </button>
+        </div>
+    </div>
+</template>
+
+<!-- ใบขอซื้อวัสดุ -->
+<template id="materialTemplate">
+    <div class="staff-table-container">
+        <div class="header-title-group"><h3>ใบขอซื้อวัสดุ</h3></div>
+        <div class="form-row">
+            <label>รุ่นที่</label>
+            <div class="select-wrapper">
+                <input type="text" id="batchInput" list="batchOptions" placeholder="พิมพ์เพื่อค้นหา..." autocomplete="off">
+                <datalist id="batchOptions"></datalist>
+                <div id="status"></div>
+            </div>
+        </div>
+        <div class="form-actions">
+            <button type="button" id="mtrBtn" class="confirmBtn">
+                <i class="fas fa-file-word"></i> สร้างเอกสาร
+            </button>
+        </div>
+    </div>
+</template>
+
+<!-- หักล้างยืมเงิน -->
+<template id="requestTemplate">
+    <div class="staff-table-container">
+        <div class="header-title-group"><h3>หักล้างยืมเงิน</h3></div>
+        <div class="form-row">
+            <label>รุ่นที่</label>
+            <div class="select-wrapper">
+                <input type="text" id="batchInput" list="batchOptions" placeholder="พิมพ์เพื่อค้นหา..." autocomplete="off">
+                <datalist id="batchOptions"></datalist>
+                <div id="status"></div>
+            </div>
+        </div>
+        <div class="form-actions">
+            <button type="button" id="saveBtn" class="confirmBtn">
+                <i class="fas fa-file-word"></i> สร้างเอกสาร
+            </button>
+        </div>
+    </div>
+</template>
+
+<!-- ประกาศจบ -->
+<template id="completionTemplate">
+    <div class="staff-table-container">
+        <div class="header-title-group"><h3>ประกาศจบ</h3></div>
+        <div class="form-row">
+            <label>รุ่นที่</label>
+            <div class="select-wrapper">
+                <input type="text" id="batchInput" list="batchOptions" placeholder="พิมพ์เพื่อค้นหา..." autocomplete="off">
+                <datalist id="batchOptions"></datalist>
+                <div id="status"></div>
+            </div>
+        </div>
+        <div class="form-actions">
+            <button type="button" id="cptBtn" class="confirmBtn">
+                <i class="fas fa-file-word"></i> สร้างเอกสาร
+            </button>
+        </div>
+    </div>
+</template>
+
+<!-- เบิกวิทยากร -->
+<template id="feeTemplate">
+    <div class="staff-table-container">
+        <div class="header-title-group"><h3>เบิกวิทยากร</h3></div>
+        <div class="form-row">
+            <label>รุ่นที่</label>
+            <div class="select-wrapper">
+                <input type="text" id="batchInput" list="batchOptions" placeholder="พิมพ์เพื่อค้นหา..." autocomplete="off">
+                <datalist id="batchOptions"></datalist>
+                <div id="status"></div>
+            </div>
+        </div>
+        <div class="form-actions">
+            <button type="button" id="saveBtn" class="confirmBtn">
+                <i class="fas fa-file-word"></i> สร้างเอกสาร
+            </button>
+        </div>
+    </div>
+</template>
+
+<!-- เบิกค่าอาหาร ✅ แก้ id เป็น FoodTemplate และ button เป็น foodBtn -->
+<template id="FoodTemplate">
+    <div class="staff-table-container">
+        <div class="header-title-group"><h3>เบิกค่าอาหาร</h3></div>
+        <div class="form-row">
+            <label>รุ่นที่</label>
+            <div class="select-wrapper">
+                <input type="text" id="batchInput" list="batchOptions" placeholder="พิมพ์เพื่อค้นหา..." autocomplete="off">
+                <datalist id="batchOptions"></datalist>
+                <div id="status"></div>
+            </div>
+        </div>
+        <div class="form-actions">
+            <button type="button" id="foodBtn" class="confirmBtn">
+                <i class="fas fa-file-word"></i> สร้างเอกสาร
+            </button>
+        </div>
+    </div>
+</template>
+
+<!-- เบิกค่าอาหารว่าง ✅ button เป็น snackBtn -->
+<template id="FoodsnackTemplate">
+    <div class="staff-table-container">
+        <div class="header-title-group"><h3>เบิกค่าอาหารว่าง</h3></div>
+        <div class="form-row">
+            <label>รุ่นที่</label>
+            <div class="select-wrapper">
+                <input type="text" id="batchInput" list="batchOptions" placeholder="พิมพ์เพื่อค้นหา..." autocomplete="off">
+                <datalist id="batchOptions"></datalist>
+                <div id="status"></div>
+            </div>
+        </div>
+        <div class="form-actions">
+            <button type="button" id="snackBtn" class="confirmBtn">
+                <i class="fas fa-file-word"></i> สร้างเอกสาร
+            </button>
+        </div>
+    </div>
+</template>
+
+<!-- เพิ่ม/แก้ไขข้อมูล -->
+
+<template id="staffTableTemplate">
+    <div class="staff-table-container">
+        <div class="staff-header">
+            <div class="header-title-group">
+                <h3>รายชื่อเจ้าหน้าที่</h3>
+            </div>
+            <button class="add-btn" onclick="openStaffModal()">+ เพิ่มเจ้าหน้าที่</button>
+        </div>
+        
+        <div class="table-scroll-area">
+            <table class="staff-table">
+                <thead>
+                    <tr>
+                        <th>ชื่อ-นามสกุล</th>
+                        <th>ตำแหน่ง</th>
+                        <th>กลุ่มงาน</th>
+                        <th>เบอร์โทรศัพท์</th>
+                        <th style="text-align: center;">จัดการ</th>
+                    </tr>
+                </thead>
+                <tbody id="staffTableBody"></tbody>
+            </table>
+        </div>
+    </div>
+</template>
+
+<!-- ตารางหลักสูตร -->
+<template id="courseTableTemplate">
+    <div class="staff-table-container">
+        <div class="staff-header">
+            <div class="header-title-group">
+                <h3>รายชื่อหลักสูตร</h3>
+            </div>
+            <button class="add-btn" onclick="openCourseModal()">+ เพิ่มหลักสูตร</button>
+        </div>
+        
+        <div class="table-scroll-area">
+            <table class="staff-table">
+                <thead>
+                    <tr>
+                        <th>รหัสหลักสูตร</th>
+                        <th>ชื่อหลักสูตร</th>
+                        <th>ชั่วโมงฝึก</th>
+                        <th>ประเภท</th>
+                        <th>กลุ่มย่อย</th>
+                        <th style="text-align: center;">จัดการ</th>
+                    </tr>
+                </thead>
+                <tbody id="courseTableBody"></tbody>
+            </table>
+        </div>
+    </div>
+</template>
+
+<!-- ตารางกิจกรรม -->
+<template id="projectTableTemplate">
+    <div class="staff-table-container">
+        <div class="staff-header">
+            <div class="header-title-group">
+                <h3>โครงการกิจกรรม</h3>
+            </div>
+            <button class="add-btn" onclick="openProjectModal()">+ เพิ่มโครงการ</button>
+        </div>
+        
+        <div class="table-scroll-area">
+            <table class="staff-table">
+                <thead>
+                    <tr>
+                        <th>ชื่อกิจกรรม</th>
+                        <th>ปีงบประมาณ</th>
+                        <th>ประเภทงบ</th>
+                         <th>ค่าใช้จ่าย</th>
+                        <th>ชื่อกิจกรรม</th>
+                        <th>กิจกรรมย่อย</th>
+                        <th>โครงการ</th>
+                        <th>แผนงาน</th>
+                        <th>เป้าหมาย</th>
+                        <th style="text-align: center;">จัดการ</th>
+                    </tr>
+                </thead>
+                <tbody id="projectTableBody"></tbody>
+            </table>
+        </div>
+    </div>
+</template>
+
+<!-- ตารางสถานที่ฝึก -->
+<template id="locationsTableTemplate">
+    <div class="staff-table-container">
+        <div class="staff-header">
+            <div class="header-title-group">
+                <h3>สถานที่ฝึกอบรม</h3>
+            </div>
+            <button class="add-btn" onclick="openLocationModal()">+ เพิ่มสถานที่</button>
+        </div>
+        
+        <div class="table-scroll-area">
+            <table class="staff-table">
+                <thead>
+                    <tr>
+                        <th>ชื่อสถานที่</th>
+                        <th style="text-align: center;">จัดการ</th>
+                    </tr>
+                </thead>
+                <tbody id="locationsTableBody"></tbody>
+            </table>
+        </div>
+    </div>
+</template>
+
+<!-- ตารางวิทยากร -->
+<template id="instructorsTableTemplate">
+    <div class="staff-table-container">
+        <div class="staff-header">
+            <div class="header-title-group">
+                <h3>รายชื่อวิทยากร</h3>
+            </div>
+            <button class="add-btn" onclick="openInstructorModal()">+ เพิ่มวิทยากร</button>
+        </div>
+        
+        <div class="table-scroll-area">
+            <table class="staff-table">
+                <thead>
+                    <tr>
+                        <th>ชื่อ-นามสกุล</th>
+                        <th>เลขบัตรวิทยากร</th>
+                        <th>สาขาถนัดฝึก</th>
+                        <th>เบอร์โทรศัพท์</th>
+                        <th style="text-align: center;">จัดการ</th>
+                    </tr>
+                </thead>
+                <tbody id="instructorsTableBody"></tbody>
+            </table>
+        </div>
+    </div>
+</template>
+
+<!--ตารางผู้สมัคร-->
+<template id="applicantsTableTemplate">
+    <div class="staff-table-container">
+        <div class="staff-header">
+            <div class="header-title-group">
+                <h3>รายชื่อผู้สมัคร</h3>
+            </div>
+            <!-- 🔥 เพิ่มปุ่มแก้ไขทั้งรุ่น -->
+            <div style="display: flex; gap: 10px;">
+                <button class="add-btn" onclick="openApplicantModal()">+ เพิ่มผู้สมัคร</button>
+                <button class="add-btn" onclick="openBulkEditApplicantModal()">📝 แก้ไขผลการฝึก</button>
+            </div>
+        </div>
+        <div class="table-scroll-area">
+            <table class="staff-table">
+                <thead>
+                    <tr>
+                        <th>รุ่น</th>
+                        <th>ชื่อ-นามสกุล</th>
+                        <th>เพศ</th>
+                        <th>ผลการฝึก</th>
+                        <th style="text-align: center;">จัดการ</th>
+                    </tr>
+                </thead>
+                <tbody id="applicantsTableBody"></tbody>
+            </table>
+        </div>
+    </div>
+</template>
+
+<template id="loadrecordTableTemplate">
+    <div class="staff-table-container">
+        <div class="staff-header">
+            <div class="header-title-group">
+                <h3>รายการยืมเงิน</h3>
+            </div>
+            <button class="add-btn" onclick="openLoanModal()">+ เพิ่มรายการ</button>     
+        </div>
+        <div class="table-scroll-area">
+            <table class="staff-table">
+                <thead>
+                    <tr>
+                        <th>รุ่น</th>
+                        <th>เลขที่สัญญา</th>
+                        <th>จำนวนหัวที่ยืม</th>
+                        <th>วันที่ยืม</th>
+                        <th>วันที่หักล้าง</th>
+                        <th>หัวหักล้างวันที่ 1</th>
+                        <th>หัวหักล้างวันที่ 2</th>
+                        <th style="text-align: center;">จัดการ</th>
+                    </tr>
+                </thead>
+                <tbody id="loadrecordTableBody"></tbody>
+            </table>
+        </div>
+    </div>
+</template>
+
+<!-- Scripts -->
+<script src="./js/select-search.js"></script>
+<script src="./js/step.js"></script>
+<script src="./js/sub_menu.js"></script> 
+<script src="./js/create.js"></script>
+<script src="./js/guard.js"></script>
+ <script src="./js/click-menu.js"></script>
+<script src="./js/inout.js"></script>
+
+</body>
+</html>

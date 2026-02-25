@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <title>จัดการรายชื่อผู้สมัคร</title>
+    <link rel="stylesheet" href="../css/index.css">
+    <link rel="stylesheet" href="../css/form.css">
+</head>
+<body>
+
+<header class="topbar">
+    <a href="../index.html" class="logo-box">
+        <img src="../img/logo.png" alt="logo">
+    </a>
+</header>
+
+<div class="container">
+    <main class="content">
+        <div class="page-header">
+            <h2 class="page-title" id="formTitle">เพิ่มรายชื่อผู้สมัคร</h2>
+        </div>
+
+        <!-- 🔥 Mode 1: Single Edit (แก้ไขคนเดียว) -->
+        <div id="singleEditMode" style="display: none;">
+            <form id="singleApplicantForm" class="form-container">
+                <input type="hidden" id="applicantId">
+                
+                <div class="form-group">
+                    <label for="single_batch_code">รุ่น *</label>
+                    <input type="text" id="single_batch_code" disabled>
+                </div>
+                
+                <div class="form-group">
+                    <label for="single_name">ชื่อ-นามสกุล *</label>
+                    <input type="text" id="single_name" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="single_gender">เพศ *</label>
+                    <select id="single_gender" required>
+                        <option value="ชาย">ชาย</option>
+                        <option value="หญิง">หญิง</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="single_result">ผลการฝึก</label>
+                    <select id="single_result">
+                        <option value="">รอผล</option>
+                        <option value="ผ่าน">ผ่าน</option>
+                        <option value="ไม่ผ่าน">ไม่ผ่าน</option>
+                    </select>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary" onclick="window.history.back()">ยกเลิก</button>
+                    <button type="submit" class="btn-success">💾 บันทึก</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- 🔥 Mode 2: Bulk Edit (แก้ไขทั้งรุ่น) -->
+        <div id="bulkEditMode" style="display: none;">
+            <div class="form-container">
+                <h3>เลือกรุ่นที่ต้องการแก้ไข</h3>
+                
+                <div class="form-group">
+                    <label for="edit_batch_code">รุ่น *</label>
+                    <input type="text" id="edit_batch_code" 
+                        list="edit_batch_options"
+                        placeholder="พิมพ์หรือเลือกรุ่น..."
+                        autocomplete="off">
+                    <datalist id="edit_batch_options"></datalist>
+                </div>
+            </div>
+
+            <!-- ตารางแสดงรายชื่อทั้งหมด -->
+            <div id="bulkEditTable" style="display: none; margin-top: 30px;">
+                <div class="form-container">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <h3>รายชื่อผู้สมัครรุ่น <span id="selectedBatchCode"></span></h3>
+                        <div>
+                            <button type="button" class="btn-secondary" onclick="selectAllPassed(true)">✅ เลือกทั้งหมด</button>
+                            <button type="button" class="btn-secondary" onclick="selectAllPassed(false)">❌ ยกเลิกทั้งหมด</button>
+                        </div>
+                    </div>
+                    
+                    <div class="table-scroll-area">
+                        <table class="staff-table">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>ชื่อ-นามสกุล</th>
+                                    <th>เพศ</th>
+                                    <th style="text-align: center;">ผลการฝึก</th>
+                                </tr>
+                            </thead>
+                            <tbody id="bulkEditTableBody"></tbody>
+                        </table>
+                    </div>
+
+                    <div class="form-actions" style="margin-top: 20px;">
+                        <button type="button" class="btn-secondary" onclick="window.history.back()">ยกเลิก</button>
+                        <button type="button" class="btn-success" onclick="saveBulkResults()">💾 บันทึกผลการฝึกทั้งหมด</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 🔥 Mode 3: Bulk Create (เพิ่มหลายคน) -->
+        <div id="bulkCreateMode">
+            <form id="applicantForm" class="form-container">
+                <!-- เลือกรุ่น -->
+                <div class="form-group">
+                    <label for="batch_code">รุ่น *</label>
+                    <input type="text" id="batch_code" 
+                        list="batch_options"
+                        placeholder="พิมพ์หรือเลือกรุ่น..."
+                        autocomplete="off"
+                        required>
+                    <datalist id="batch_options"></datalist>
+                </div>
+
+                <!-- Textarea สำหรับ Paste หลายชื่อ -->
+                <div class="form-group">
+                    <label for="namesInput">รายชื่อผู้สมัคร *</label>
+                    <textarea 
+                        id="namesInput" 
+                        rows="10" 
+                        placeholder="วางรายชื่อที่นี่ (ชื่อละบรรทัด)
+ตัวอย่าง:
+สมชาย ใจดี
+สมหญิง รักดี
+ประยุทธ์ มานะ"
+                        style="width: 100%; padding: 10px; font-size: 14px; font-family: 'Sarabun', sans-serif;"
+                    ></textarea>
+                    <small style="color: #666;">💡 วางรายชื่อจาก Excel ได้เลย (ชื่อละบรรทัด)</small>
+                </div>
+
+                <!-- เพศเริ่มต้น -->
+                <div class="form-group">
+                    <label for="defaultGender">เพศเริ่มต้น</label>
+                    <select id="defaultGender">
+                        <option value="ชาย">ชาย</option>
+                        <option value="หญิง">หญิง</option>
+                    </select>
+                    <small style="color: #666;">💡 เพศเริ่มต้นสำหรับทุกคน (สามารถแก้ไขทีละคนได้)</small>
+                </div>
+
+                <!-- ปุ่มสร้างรายการ -->
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary" onclick="window.history.back()">ยกเลิก</button>
+                    <button type="button" class="btn-primary" onclick="parseNames()">สร้างรายการ</button>
+                </div>
+            </form>
+
+            <!-- ตารางแสดงรายชื่อ (หลังจากกด "สร้างรายการ") -->
+            <div id="applicantTable" style="display: none; margin-top: 30px;">
+                <h3>ตรวจสอบรายชื่อ</h3>
+                
+                <div class="table-scroll-area">
+                    <table class="staff-table">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>ชื่อ-นามสกุล</th>
+                                <th>เพศ</th>
+                                <th>ผลการฝึก</th>
+                                <th>ลบ</th>
+                            </tr>
+                        </thead>
+                        <tbody id="applicantTableBody"></tbody>
+                    </table>
+                </div>
+
+                <div class="form-actions" style="margin-top: 20px;">
+                    <button type="button" class="btn-secondary" onclick="resetForm()">แก้ไขรายชื่อ</button>
+                    <button type="button" class="btn-success" onclick="saveApplicants()">💾 บันทึกทั้งหมด</button>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<script src="../js/applicant_form.js"></script>
+</body>
+</html>
